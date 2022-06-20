@@ -6,7 +6,7 @@ use std::collections::HashMap;
 mod section;
 use section::{General, Metadata};
 mod object;
-use object::{TimePoint, HitObject};
+use object::{TimePoint, HitObjects};
 
 pub enum Mode {
     Osu,
@@ -20,7 +20,7 @@ pub struct Beatmap {
     pub general: General,
     pub metadata: Metadata,
     pub timing_points: Vec<TimePoint>,
-    pub hit_objects: Vec<HitObject>
+    pub hit_objects: HitObjects
     //pub difficulty: Difficulty
 }
 

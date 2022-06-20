@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use crate::osu::Mode;
-use crate::osu::object::{TimePoint, SampleSet, HitObject, HitSound};
+use crate::osu::object::{TimePoint, SampleSet, HitSound};
+use crate::osu::object::{HitObject, HitObjects, Circle, Continuous, Slider};
 
 pub struct General {
     pub audio_filename: String,
@@ -28,7 +29,7 @@ pub fn get_general(section: &Vec<String>) -> General {
         get_key_param(line, &mut data)
     }
 
-    let audio_filename = data["AudioFilename"].clone();
+    let audio_filename = String::new();//data["AudioFilename"].clone();
     let preview_time = to_f64(&data["PreviewTime"]);
     let mode = to_u32(&data["Mode"]);
 
@@ -98,7 +99,7 @@ pub fn get_timing_points(section: &Vec<String>) -> Vec<TimePoint> {
         let sample_index = to_u32(split[4]);
         let volume = to_f32(split[5]);
         let uninherited = to_bool(split[6]); 
-        let effects = to_u32(split[7]);
+        let effects = to_u8(split[7]);
 
         timing_points.push(TimePoint{
             time,
@@ -115,24 +116,12 @@ pub fn get_timing_points(section: &Vec<String>) -> Vec<TimePoint> {
     return timing_points;
 }
 
-pub fn get_hit_objects(section: &Vec<String>) -> Vec<HitObject> {
-    let mut hit_objects: Vec<HitObject> = vec!();
-    /*
+pub fn get_hit_objects(section: &Vec<String>) -> HitObjects {
+    let mut circles: Vec<HitObject<Circle>> = vec!();
+    let mut sliders: Vec<HitObject<Slider>> = vec!();
+    let mut continuous: Vec<HitObject<Continuous>> = vec!();
 
-    1 - circle (1)
-    101 - circle with new combo (5)
-
-    10 - slider (2)
-    110 - slider with new combo (6)
-
-    1000 - spinner (8)
-    1100 - spinner with new combo (12)
-
-    10000000 - mania hold (128)
-
-    */
     for line in section {
-        println!("{}",line);
         let split = line.split(",");
         let split = split.collect::<Vec<&str>>();
 
@@ -140,24 +129,20 @@ pub fn get_hit_objects(section: &Vec<String>) -> Vec<HitObject> {
         let y =         to_f32(&split[1]);
         let time =      to_f64(&split[2]);
         let note_type = to_u8(&split[3]);
-        let hit_sound: HitSound = match to_u32(&split[4]) {
-            0 => HitSound::Normal,
-            1 => HitSound::Whistle,
-            2 => HitSound::Finish,
-            3 => HitSound::Clap,
-            _ => HitSound::Normal,
-        };
+        let hit_sound: HitSound = HitSound::new(to_u8(&split[4]));
 
-        let hit_object = match note_type {
+        match note_type {
             0b1 | 0b101 => { // Circle | New combo circle | ShortNote
                 let hit_sample = split[5].to_string();
-                HitObject {
+                let circle = HitObject::<Circle> {
                     x, y, time,
                     note_type,
                     hit_sound,
-                    end_time: 0.0,
-                    hit_sample
-                }
+                    hit_sample,
+                    other: Circle {}
+                };
+
+                circles.push(circle);
             }
             0b10000000 | 0b1000 | 0b1100 => { // Mania hold | Spinner | New combo spinner
                 // here we split end_time:hit_sample:hit_sample:hit_sample:hit_sample
@@ -171,28 +156,77 @@ pub fn get_hit_objects(section: &Vec<String>) -> Vec<HitObject> {
                     hit_sample.push_str(element);
                 }
 
-                HitObject {
+                let continuous_object = HitObject::<Continuous> {
                     x, y, time,
                     note_type,
                     hit_sound,
-                    end_time,
-                    hit_sample
-                }
+                    hit_sample,
+                    other: Continuous {
+                        end_time,
+                    }
+                };
+
+                continuous.push(continuous_object);
             }
-            _ => { 
-                println!("UNKNOWN NOTE TYPE");
-                HitObject { // slider
+            0b10 | 0b110 => { // slider
+                let params = split[5].to_string();
+                let slides = to_u32(&split[6]);
+                let length = to_f64(&split[7]);
+                
+                let edge_sounds: [HitSound; 2];
+                let edge_sets: [String; 2];
+
+                if split.len() == 11 {
+                    let help_me = split[8].split("|");
+                    let help_me = help_me.collect::<Vec<&str>>();
+                    edge_sounds = [
+                        HitSound::new(to_u8(help_me[0])),
+                        HitSound::new(to_u8(help_me[1])),
+                    ];
+    
+                    let help_me = split[9].split("|");
+                    let help_me = help_me.collect::<Vec<&str>>();
+                    edge_sets = [
+                        help_me[0].to_string(),
+                        help_me[1].to_string()
+                    ];
+                }
+                else {
+                    edge_sounds = [HitSound::Normal, HitSound::Normal];
+                    edge_sets = ["0:0".to_string(), "0:0".to_string()];
+                }
+
+                let hit_sample = split[10].to_string();
+
+                let slider = HitObject::<Slider> { 
                     x, y, time,
                     note_type,
                     hit_sound,
-                    end_time: 0.0,
-                    hit_sample: "".to_string()
-                }
+                    hit_sample,
+                    other: Slider {
+                        params,
+                        slides,
+                        length,
+                        edge_sounds,
+                        edge_sets
+                    }
+                };
+
+                sliders.push(slider);
+            }
+
+            _ => {
+                println!("UNKNOWN OBJECT {note_type}");
             }
         };
-
-        hit_objects.push(hit_object);
     }
+
+    let hit_objects = HitObjects {
+        circles,
+        sliders,
+        continuous
+    };
+
     return hit_objects;
 }
 
@@ -261,3 +295,16 @@ fn to_f64(string: &str) -> f64 {
         }
     };
 }
+
+/*
+1 - circle (1)
+101 - circle with new combo (5)
+
+10 - slider (2)
+110 - slider with new combo (6)
+
+1000 - spinner (8)
+1100 - spinner with new combo (12)
+
+10000000 - mania hold (128)
+*/
