@@ -1,8 +1,9 @@
 mod osu;
+mod convert;
 use std::time::Instant;
 
 fn main() {
-    let filename = String::from("test_files/slider.osu");
+    let filename = String::from("test_files/ctb.osu");
     let now = Instant::now();
     let beatmap = osu::get_beatmap_from_file(filename);
 
@@ -11,7 +12,5 @@ fn main() {
         Err(e) => panic!("|| failed to parse beatmap: {}", e)
     };
 
-    println!("doin tests");
-    assert_eq!(beatmap.hit_objects.sliders[0].other.length, 725 as f64);
     println!("OK! Elapsed {} milliseconds", now.elapsed().as_millis());
 }

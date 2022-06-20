@@ -5,8 +5,12 @@ use std::collections::HashMap;
 
 mod section;
 use section::{General, Metadata};
-mod object;
-use object::{TimePoint, HitObjects};
+
+mod time_point;
+use time_point::TimePoint;
+
+mod hit_object;
+use hit_object::HitObjects;
 
 pub enum Mode {
     Osu,
