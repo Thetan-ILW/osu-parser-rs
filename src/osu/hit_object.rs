@@ -105,26 +105,40 @@ impl Slider {
         let edge_sets: [String; 2];
         let hit_sample: String;
 
-        if split.len() == 11 {
-            let help_me = split[8].split("|");
-            let help_me = help_me.collect::<Vec<&str>>();
-            edge_sounds = [
-                HitSound::new(convert::to_u8(help_me[0])),
-                HitSound::new(convert::to_u8(help_me[1])),
-            ];
+        match split.len() {
+            8 => {
+                edge_sounds = [HitSound::Normal, HitSound::Normal];
+                edge_sets = ["0:0".to_string(), "0:0".to_string()];
+                hit_sample = String::from("");
+            }
+            9 => {
+                edge_sounds = [HitSound::Normal, HitSound::Normal];
+                edge_sets = ["0:0".to_string(), "0:0".to_string()];
+                hit_sample = split[8].to_string();
+            }
+            11 => {
+                let help_me = split[8].split("|");
+                let help_me = help_me.collect::<Vec<&str>>();
+                edge_sounds = [
+                    HitSound::new(convert::to_u8(help_me[0])),
+                    HitSound::new(convert::to_u8(help_me[1])),
+                ];
+    
+                let help_me = split[9].split("|");
+                let help_me = help_me.collect::<Vec<&str>>();
+                edge_sets = [
+                    help_me[0].to_string(),
+                    help_me[1].to_string()
+                ];
 
-            let help_me = split[9].split("|");
-            let help_me = help_me.collect::<Vec<&str>>();
-            edge_sets = [
-                help_me[0].to_string(),
-                help_me[1].to_string()
-            ];
-            hit_sample = split[10].to_string();
-        }
-        else {
-            edge_sounds = [HitSound::Normal, HitSound::Normal];
-            edge_sets = ["0:0".to_string(), "0:0".to_string()];
-            hit_sample = split[7].to_string(); // TESTS
+                hit_sample = split[10].to_string();
+            }
+            _ => {
+                edge_sounds = [HitSound::Normal, HitSound::Normal];
+                edge_sets = ["0:0".to_string(), "0:0".to_string()];
+                hit_sample = String::from("");
+                println!("slider {} len is {}", split[2], split.len())
+            }
         }
 
         let mut slider = HitObject::<Slider>::from_split(

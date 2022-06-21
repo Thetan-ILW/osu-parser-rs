@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use crate::convert;
 use crate::osu::Mode;
 use crate::osu::time_point::TimePoint;
-use crate::osu::hit_object::{HitSound, HitObject, HitObjects, Circle, Continuous, Slider};
+use crate::osu::hit_object::{HitObject, HitObjects, Circle, Continuous, Slider};
 
 pub struct General {
     pub audio_filename: String,
@@ -141,16 +141,3 @@ fn get_key_param(line: &String, data: &mut HashMap<String, String>) {
         );
     }
 }
-
-/*
-1 - circle (1)
-101 - circle with new combo (5)
-
-10 - slider (2)
-110 - slider with new combo (6)
-
-1000 - spinner (8)
-1100 - spinner with new combo (12)
-
-10000000 - mania hold (128)
-*/
