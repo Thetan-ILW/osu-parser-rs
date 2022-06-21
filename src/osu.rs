@@ -3,14 +3,16 @@ use std::fs::File;
 use std::io::{prelude::*, BufReader};
 use std::collections::HashMap;
 
-mod section;
-use section::{General, Metadata};
+mod settings;
+use settings::Settings;
 
-mod time_point;
-use time_point::TimePoint;
+mod timing;
+use timing::TimePoint;
 
-mod hit_object;
-use hit_object::HitObjects;
+mod note;
+use note::NoteData;
+
+mod importer;
 
 pub enum Mode {
     Osu,
@@ -21,31 +23,29 @@ pub enum Mode {
 }
 
 pub struct Beatmap {
-    pub general: General,
-    pub metadata: Metadata,
-    pub timing_points: Vec<TimePoint>,
-    pub hit_objects: HitObjects
+    pub settings: Settings,
+    pub timing_data: Vec<TimePoint>,
+    pub note_data: NoteData
     //pub difficulty: Difficulty
 }
 
-pub fn get_beatmap_from_file(filename: String) -> Result<Beatmap, Error> {
-    let reader = import(&filename);
+pub fn import(filename: String) -> Result<Beatmap, Error> {
+    let reader = open_file(&filename);
     let reader = match reader {
         Ok(reader) => reader,
         Err(e) => panic!("Failed to read file: {filename} | {e}")
     };
 
     let data = get_sections(reader)?;
-    let general = section::get_general(&data["[General]"]);
-    let metadata = section::get_metadata(&data["[Metadata]"]);
-    let timing_points = section::get_timing_points(&data["[TimingPoints]"]);
-    let hit_objects = section::get_hit_objects(&data["[HitObjects]"]);
+
+    let settings = importer::get_settings(&data);
+    let timing_data = importer::get_timing_points(&data);
+    let note_data = importer::get_notedata(&data);
 
     return Ok(Beatmap {
-        general,
-        metadata,
-        timing_points,
-        hit_objects
+        settings,
+        timing_data,
+        note_data
     })
 }
 
@@ -89,7 +89,7 @@ fn is_section_line(line: &String) -> bool {
     return false
 }
 
-fn import(filename: &str) -> Result<BufReader<File>, std::io::Error> {
+fn open_file(filename: &str) -> Result<BufReader<File>, std::io::Error> {
     let file = File::open(filename)?;
     let reader = BufReader::new(file);
     Ok(reader)
