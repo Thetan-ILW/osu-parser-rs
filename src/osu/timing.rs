@@ -1,11 +1,5 @@
 use crate::magic;
-
-pub enum SampleSet {
-    Default,
-    Normal,
-    Soft,
-    Drum
-}
+use crate::osu::SampleSet;
 
 pub struct TimePoint {
     pub time: f64,
@@ -25,17 +19,11 @@ impl TimePoint {
         let meter = magic::convert(&split[2], 0);
 
         let sample_set = magic::convert(&split[3], 0);
-        let sample_set = match sample_set {
-            0 => SampleSet::Default,
-            1 => SampleSet::Normal,
-            2 => SampleSet::Soft,
-            3 => SampleSet::Drum,
-            _ => SampleSet::Default
-        };
+        let sample_set = SampleSet::new(sample_set);
 
         let sample_index = magic::convert(&split[4], 0);
         let volume = magic::convert(&split[5], 100.0);
-        let uninherited = split[6].clone().parse::<bool>().unwrap_or(true); // idiot
+        let uninherited = split[6].parse::<bool>().unwrap_or_else(|_|true); // idiot
         let effects = magic::convert::<u8>(&split[7], 0);
         Self {
             time,

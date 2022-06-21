@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use crate::magic;
-use crate::osu::Mode;
+use crate::osu::{Mode, SampleSet};
 use crate::osu::settings::{
     General, Editor, Metadata, Difficulty, Events
 };
@@ -14,25 +14,57 @@ pub fn get_general(section: &Vec<String>) -> General {
 
     let audio_filename = magic::get_value(&data, "AudioFilename", String::new());
     let preview_time = magic::get_value::<f64>(&data, "PreviewTime", 0.0);
-    let mode = magic::get_value::<i8>(&data, "Mode", 4);
-
-    let mode: Mode = match mode {
-        0 => Mode::Osu,
-        1 => Mode::Taiko,
-        2 => Mode::Fruits,
-        3 => Mode::Mania,
-        _ => Mode::Unknown
+    let countdown = data["Countdown"].parse::<bool>().unwrap_or_else(|_|false);
+    let sample_set = {
+        let value = &data["SampleSet"];
+        let value = match data["SampleSet"] {
+            _ if value == "Default" => 0,
+            _ if value == "Normal" => 1,
+            _ if value == "Soft" => 2,
+            _ if value == "Drum" => 3,
+            _ => 1
+        };
+        SampleSet::new(value)
     };
+    let stack_leniency = magic::get_value::<f32>(&data, "StackLeniency", 0.0);
+    let mode = {
+        let value = magic::get_value::<i8>(&data, "Mode", 4);
+        Mode::new(value)
+    };
+    let letter_box_in_breaks = data["LetterboxInBreaks"].parse::<bool>().unwrap_or_else(|_|false);
+    let widescreen_storyboard = data["WidescreenStoryboard"].parse::<bool>().unwrap_or_else(|_|false);
+    let samples_match_playback = data["SamplesMatchPlaybackRate"].parse::<bool>().unwrap_or_else(|_|false);
 
     General{
         audio_filename,
         preview_time,
-        mode
+        countdown,
+        sample_set,
+        stack_leniency,
+        mode,
+        letter_box_in_breaks,
+        widescreen_storyboard,
+        samples_match_playback
     }
 }
 
 pub fn get_editor(section: &Vec<String>) -> Editor {
-    Editor {}
+    let mut data: HashMap<String, String> = HashMap::new();
+
+    for line in section {
+        get_key_value(line, &mut data)
+    }
+
+    let distance_spacing = magic::get_value::<f32>(&data, "DistanceSpacing", 1.0);
+    let beat_divisor = magic::get_value::<f32>(&data, "BeatDivisor", 16.0);
+    let grid_size = magic::get_value::<f32>(&data, "GridSize", 16.0);
+    let timeline_zoom = magic::get_value::<f32>(&data, "TimelineZoom", 16.0);
+    Editor {
+        distance_spacing,
+        beat_divisor,
+        grid_size,
+        timeline_zoom
+    }
 }
 
 pub fn get_difficulty(section: &Vec<String>) -> Difficulty {
@@ -41,10 +73,19 @@ pub fn get_difficulty(section: &Vec<String>) -> Difficulty {
         get_key_value(line, &mut data)
     }
 
+    let hp_drain_rate = magic::get_value::<f32>(&data, "HPDrainRate", 5.0);
     let circle_size = magic::get_value::<f32>(&data, "CircleSize", 5.0);
-    
+    let overall_difficulty = magic::get_value::<f32>(&data, "OverallDifficulty", 5.0);
+    let approach_rate = magic::get_value::<f32>(&data, "ApproachRate", 5.0);
+    let slider_multiplier = magic::get_value::<f32>(&data, "SliderMultiplier", 1.0);
+    let slider_tick_rate = magic::get_value::<f32>(&data, "SliderTickRate", 1.0);
     Difficulty {
-        circle_size
+        hp_drain_rate,
+        circle_size,
+        overall_difficulty,
+        approach_rate,
+        slider_multiplier,
+        slider_tick_rate
     }
 }
 
