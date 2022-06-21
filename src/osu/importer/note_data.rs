@@ -1,9 +1,46 @@
 use crate::magic;
 use crate::osu::note::{
-    HitObject, 
+    HitObject, NoteData, 
     Circle, Slider, Continuous, 
     HitSound
 };
+
+pub fn get_note_data(section: &Vec<String>) -> NoteData {
+    let mut circles: Vec<HitObject<Circle>> = vec!();
+    let mut sliders: Vec<HitObject<Slider>> = vec!();
+    let mut continuous: Vec<HitObject<Continuous>> = vec!();
+
+    for line in section {
+        let split = line.split(",");
+        let split = split.collect::<Vec<&str>>();
+
+        let note_type = magic::convert::<u8>(&split[3], 1);
+
+        match note_type {
+            0b1 | 0b101 => { // Circle | New combo circle | ShortNote
+                let circle = Circle::from_split(split);
+                circles.push(circle);
+            }
+            0b10000000 | 0b1000 | 0b1100 => { // Mania hold | Spinner | New combo spinner
+                let continuous_object = Continuous::from_split(split);
+                continuous.push(continuous_object);
+            }
+            0b10 | 0b110 => { // slider
+                let slider = Slider::from_split(split);
+                sliders.push(slider);
+            }
+            _ => {
+                println!("UNKNOWN OBJECT {note_type}");
+            }
+        };
+    }
+
+    NoteData {
+        circles,
+        sliders,
+        continuous
+    }
+}
 
 impl<T> HitObject<T> {
     pub fn from_split(split: &Vec<&str>, other: T) -> Self {

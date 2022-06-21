@@ -26,7 +26,6 @@ pub struct Beatmap {
     pub settings: Settings,
     pub timing_data: Vec<TimePoint>,
     pub note_data: NoteData
-    //pub difficulty: Difficulty
 }
 
 pub fn import(filename: String) -> Result<Beatmap, Error> {
@@ -40,7 +39,7 @@ pub fn import(filename: String) -> Result<Beatmap, Error> {
 
     let settings = importer::get_settings(&data);
     let timing_data = importer::get_timing_points(&data);
-    let note_data = importer::get_notedata(&data);
+    let note_data = importer::get_note_data(&data);
 
     return Ok(Beatmap {
         settings,
