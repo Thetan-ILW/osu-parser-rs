@@ -4,7 +4,7 @@ mod note_data;
 
 use std::collections::HashMap;
 
-use crate::convert;
+use crate::magic;
 
 use crate::osu::settings;
 use settings::{Settings};
@@ -48,7 +48,7 @@ pub fn get_notedata(sections: &HashMap<String, Vec<String>>) -> NoteData {
         let split = line.split(",");
         let split = split.collect::<Vec<&str>>();
 
-        let note_type = convert::to_u8(&split[3]);
+        let note_type = magic::convert::<u8>(&split[3], 1);
 
         match note_type {
             0b1 | 0b101 => { // Circle | New combo circle | ShortNote

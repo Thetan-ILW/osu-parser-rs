@@ -1,4 +1,4 @@
-use crate::convert;
+use crate::magic;
 
 pub enum SampleSet {
     Default,
@@ -20,11 +20,11 @@ pub struct TimePoint {
 
 impl TimePoint {
     pub fn from_split(split: Vec<&str>) -> Self {
-        let time = convert::to_f64(split[0]);
-        let beat_length = convert::to_f64(split[1]);
-        let meter = convert::to_u32(split[2]);
+        let time = magic::convert(&split[0], 0.0);
+        let beat_length = magic::convert(&split[1], 0.0);
+        let meter = magic::convert(&split[2], 0);
 
-        let sample_set = convert::to_u32(split[3]);
+        let sample_set = magic::convert(&split[3], 0);
         let sample_set = match sample_set {
             0 => SampleSet::Default,
             1 => SampleSet::Normal,
@@ -33,10 +33,10 @@ impl TimePoint {
             _ => SampleSet::Default
         };
 
-        let sample_index = convert::to_u32(split[4]);
-        let volume = convert::to_f32(split[5]);
-        let uninherited = convert::to_bool(split[6]); 
-        let effects = convert::to_u8(split[7]);
+        let sample_index = magic::convert(&split[4], 0);
+        let volume = magic::convert(&split[5], 100.0);
+        let uninherited = split[6].clone().parse::<bool>().unwrap_or(true); // idiot
+        let effects = magic::convert::<u8>(&split[7], 0);
         Self {
             time,
             beat_length,

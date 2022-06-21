@@ -1,5 +1,5 @@
 mod osu;
-mod convert;
+mod magic;
 use std::time::Instant;
 
 fn main() {

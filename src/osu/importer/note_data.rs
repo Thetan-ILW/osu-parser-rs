@@ -1,6 +1,5 @@
-use crate::convert;
+use crate::magic;
 use crate::osu::note::{
-    NoteData, 
     HitObject, 
     Circle, Slider, Continuous, 
     HitSound
@@ -8,11 +7,11 @@ use crate::osu::note::{
 
 impl<T> HitObject<T> {
     pub fn from_split(split: &Vec<&str>, other: T) -> Self {
-        let x =         convert::to_f32(&split[0]);
-        let y =         convert::to_f32(&split[1]);
-        let time =      convert::to_f64(&split[2]);
-        let note_type = convert::to_u8(&split[3]);
-        let hit_sound:  HitSound = HitSound::new(convert::to_u8(&split[4]));
+        let x =         magic::convert::<f32>(&split[0], 0.0);
+        let y =         magic::convert::<f32>(&split[1], 0.0);
+        let time =      magic::convert(&split[2], 0.0);
+        let note_type = magic::convert::<u8>(&split[3], 0);
+        let hit_sound:  HitSound = HitSound::new(magic::convert::<u8>(&split[4], 0));
         let hit_sample = String::new();
         
         Self {
@@ -37,7 +36,7 @@ impl Continuous {
     pub fn from_split(split: Vec<&str>) -> HitObject<Self> {
         let line_end_split = split[5].split(":");
         let mut line_end_split = line_end_split.collect::<Vec<&str>>();
-        let end_time = convert::to_f64(line_end_split[0]);
+        let end_time = magic::convert(line_end_split[0], 0.0);
         line_end_split.remove(0);
         let mut hit_sample = String::new();
         for element in line_end_split {
@@ -56,8 +55,8 @@ impl Continuous {
 impl Slider {
     pub fn from_split(split: Vec<&str>) -> HitObject<Self> {
         let params =        split[5].to_string();
-        let slides =        convert::to_u32(&split[6]);
-        let length =        convert::to_f64(&split[7]);
+        let slides =        magic::convert(&split[6], 0);
+        let length =        magic::convert(&split[7], 0.0);
         let edge_sounds: [HitSound; 2];
         let edge_sets: [String; 2];
         let hit_sample: String;
@@ -77,8 +76,8 @@ impl Slider {
                 let help_me = split[8].split("|");
                 let help_me = help_me.collect::<Vec<&str>>();
                 edge_sounds = [
-                    HitSound::new(convert::to_u8(help_me[0])),
-                    HitSound::new(convert::to_u8(help_me[1])),
+                    HitSound::new(magic::convert::<u8>(help_me[0], 0)),
+                    HitSound::new(magic::convert::<u8>(help_me[1], 0)),
                 ];
     
                 let help_me = split[9].split("|");

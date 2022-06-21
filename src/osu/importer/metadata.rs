@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::convert;
+use crate::magic;
 use crate::osu::Mode;
 use crate::osu::settings::{
     General, Editor, Metadata, Difficulty, Events
@@ -12,9 +12,9 @@ pub fn get_general(section: &Vec<String>) -> General {
         get_key_value(line, &mut data)
     }
 
-    let audio_filename = String::new();//data["AudioFilename"].clone();
-    let preview_time = convert::to_f64(&data["PreviewTime"]);
-    let mode = convert::to_u32(&data["Mode"]);
+    let audio_filename = magic::get_value(&data, "AudioFilename", String::new());
+    let preview_time = magic::get_value::<f64>(&data, "PreviewTime", 0.0);
+    let mode = magic::get_value::<i8>(&data, "Mode", 4);
 
     let mode: Mode = match mode {
         0 => Mode::Osu,
@@ -41,7 +41,7 @@ pub fn get_difficulty(section: &Vec<String>) -> Difficulty {
         get_key_value(line, &mut data)
     }
 
-    let circle_size = convert::to_f32(&data["CircleSize"]);
+    let circle_size = magic::get_value::<f32>(&data, "CircleSize", 5.0);
     
     Difficulty {
         circle_size
@@ -55,12 +55,12 @@ pub fn get_metadata(section: &Vec<String>) -> Metadata {
         get_key_value(line, &mut data)
     }
 
-    let title =             data["Title"].clone();
-    let title_unicode =     data["TitleUnicode"].clone();
-    let artist =            data["Artist"].clone();
-    let artist_unicode =    data["ArtistUnicode"].clone();
-    let creator =           data["Creator"].clone();
-    let version =           data["Version"].clone();
+    let title =          magic::get_value(&data, "Title", String::new());
+    let title_unicode =  magic::get_value(&data, "TitleUnicode", String::new());
+    let artist =         magic::get_value(&data, "Artist", String::new());
+    let artist_unicode = magic::get_value(&data, "ArtistUnicode", String::new());
+    let creator =        magic::get_value(&data, "Creator", String::new());
+    let version =        magic::get_value(&data, "Version", String::new());
 
     Metadata{
         title,
@@ -76,6 +76,8 @@ pub fn get_events(section: &Vec<String>) -> Events
 {
     Events {}
 }
+
+
 
 fn get_key_value(line: &String, data: &mut HashMap<String, String>) {
     let key_value = line.split(":");
