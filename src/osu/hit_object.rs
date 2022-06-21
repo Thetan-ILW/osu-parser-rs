@@ -35,6 +35,25 @@ pub struct HitObject<T> {
     pub other: T
 }
 
+impl<T> HitObject<T> {
+    pub fn from_split(split: &Vec<&str>, other: T) -> Self {
+        let x =         convert::to_f32(&split[0]);
+        let y =         convert::to_f32(&split[1]);
+        let time =      convert::to_f64(&split[2]);
+        let note_type = convert::to_u8(&split[3]);
+        let hit_sound:  HitSound = HitSound::new(convert::to_u8(&split[4]));
+        let hit_sample = String::new();
+        
+        Self {
+            x, y, time,
+            note_type,
+            hit_sound,
+            hit_sample,
+            other
+        }
+    }
+}
+
 pub struct Circle {}
 
 pub struct Continuous {
@@ -49,23 +68,36 @@ pub struct Slider {
     pub edge_sets: [String; 2],
 }
 
+impl Circle {
+    pub fn from_split(split: Vec<&str>)  -> HitObject<Self> {
+        let mut circle = HitObject::<Self>::from_split(&split, Self {});
+        circle.hit_sample = split[5].to_string();
+        return circle
+    }
+}
+
 impl Continuous {
-    pub fn from_split(split: Vec<&str>) -> (Self, String) {
+    pub fn from_split(split: Vec<&str>) -> HitObject<Self> {
         let line_end_split = split[5].split(":");
         let mut line_end_split = line_end_split.collect::<Vec<&str>>();
         let end_time = convert::to_f64(line_end_split[0]);
         line_end_split.remove(0);
         let mut hit_sample = String::new();
-        for element in split {
+        for element in line_end_split {
             hit_sample.push_str(element);
         }
 
-        (Self { end_time }, hit_sample)
+        let mut continuous = HitObject::<Self>::from_split(
+            &split, Self { end_time }
+        );
+        continuous.hit_sample = hit_sample;
+
+        return continuous
     }
 }
 
 impl Slider {
-    pub fn from_split(split: Vec<&str>) -> (Self, String) {
+    pub fn from_split(split: Vec<&str>) -> HitObject<Self> {
         let params =        split[5].to_string();
         let slides =        convert::to_u32(&split[6]);
         let length =        convert::to_f64(&split[7]);
@@ -95,13 +127,17 @@ impl Slider {
             hit_sample = split[7].to_string(); // TESTS
         }
 
-        (Self { 
-            params,
-            slides,
-            length,
-            edge_sounds,
-            edge_sets
-        }, hit_sample)
+        let mut slider = HitObject::<Slider>::from_split(
+            &split, Slider{
+                params,
+                slides,
+                length,
+                edge_sounds,
+                edge_sets
+            }
+        );
 
+        slider.hit_sample = hit_sample;
+        return slider;
     }
 }

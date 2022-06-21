@@ -102,48 +102,19 @@ pub fn get_hit_objects(section: &Vec<String>) -> HitObjects {
 
         let note_type = convert::to_u8(&split[3]);
 
-        let x =         convert::to_f32(&split[0]);
-        let y =         convert::to_f32(&split[1]);
-        let time =      convert::to_f64(&split[2]);
-        let note_type = convert::to_u8(&split[3]);
-        let hit_sound:  HitSound = HitSound::new(convert::to_u8(&split[4]));
-
         match note_type {
             0b1 | 0b101 => { // Circle | New combo circle | ShortNote
-                let hit_sample =    split[5].to_string();
-                let circle = HitObject::<Circle> {
-                    x, y, time,
-                    note_type,
-                    hit_sound,
-                    hit_sample,
-                    other: Circle {}
-                };
-
+                let circle = Circle::from_split(split);
                 circles.push(circle);
             }
             0b10000000 | 0b1000 | 0b1100 => { // Mania hold | Spinner | New combo spinner
-                let (other, hit_sample) = Continuous::from_split(split);
-                let continuous_object = HitObject::<Continuous> {
-                    x, y, time,
-                    note_type,
-                    hit_sound,
-                    hit_sample,
-                    other
-                };
+                let continuous_object = Continuous::from_split(split);
                 continuous.push(continuous_object);
             }
             0b10 | 0b110 => { // slider
-                let (other, hit_sample) = Slider::from_split(split);
-                let slider = HitObject::<Slider> {
-                    x, y, time,
-                    note_type,
-                    hit_sound,
-                    hit_sample,
-                    other
-                };
+                let slider = Slider::from_split(split);
                 sliders.push(slider);
             }
-
             _ => {
                 println!("UNKNOWN OBJECT {note_type}");
             }
