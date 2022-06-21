@@ -13,11 +13,8 @@ pub fn get_value<T>(data: &HashMap<String, String>, name: &str, default_value: T
 
 pub fn convert<T>(string: &str, default_value: T) 
     -> T where T: std::str::FromStr {
-    let value = string.clone().parse::<T>();
-    match value {
-        Ok(value) => return value,
-        Err(_) => println!("failed to convert value {string}")
-    }
-
-    return default_value
+    return string.parse::<T>().unwrap_or_else(|_| {
+            println!("failed to convert value {string}"); 
+            default_value
+    });
 }
