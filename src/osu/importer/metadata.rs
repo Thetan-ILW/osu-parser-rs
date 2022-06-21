@@ -9,7 +9,7 @@ pub fn get_general(section: &Vec<String>) -> General {
     let mut data: HashMap<String, String> = HashMap::new();
 
     for line in section {
-        get_key_param(line, &mut data)
+        get_key_value(line, &mut data)
     }
 
     let audio_filename = String::new();//data["AudioFilename"].clone();
@@ -38,7 +38,7 @@ pub fn get_editor(section: &Vec<String>) -> Editor {
 pub fn get_difficulty(section: &Vec<String>) -> Difficulty {
     let mut data: HashMap<String, String> = HashMap::new();
     for line in section {
-        get_key_param(line, &mut data)
+        get_key_value(line, &mut data)
     }
 
     let circle_size = convert::to_f32(&data["CircleSize"]);
@@ -52,7 +52,7 @@ pub fn get_metadata(section: &Vec<String>) -> Metadata {
     let mut data: HashMap<String, String> = HashMap::new();
 
     for line in section {
-        get_key_param(line, &mut data)
+        get_key_value(line, &mut data)
     }
 
     let title =             data["Title"].clone();
@@ -77,14 +77,14 @@ pub fn get_events(section: &Vec<String>) -> Events
     Events {}
 }
 
-fn get_key_param(line: &String, data: &mut HashMap<String, String>) {
-    let key_param = line.split(":");
-    let key_param = key_param.collect::<Vec<&str>>();
+fn get_key_value(line: &String, data: &mut HashMap<String, String>) {
+    let key_value = line.split(":");
+    let key_value = key_value.collect::<Vec<&str>>();
 
-    if key_param.len() == 2 {
+    if key_value.len() == 2 {
         data.insert(
-            key_param[0].trim().to_string(), 
-            key_param[1].trim().to_string()
+            key_value[0].trim().to_string(), 
+            key_value[1].trim().to_string()
         );
     }
 }
