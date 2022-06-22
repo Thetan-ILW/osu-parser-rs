@@ -20,7 +20,8 @@ impl HitSound {
 pub struct NoteData {
     pub circles: Vec<HitObject<Circle>>,
     pub sliders: Vec<HitObject<Slider>>,
-    pub continuous: Vec<HitObject<Continuous>>
+    pub spinners: Vec<HitObject<Spinner>>,
+    pub holds: Vec<HitObject<Hold>>
 }
 
 pub struct HitObject<T> {
@@ -35,8 +36,12 @@ pub struct HitObject<T> {
 
 pub struct Circle {}
 
-pub struct Continuous {
-    pub end_time: f64,
+pub struct Spinner {
+    pub end_time: f64
+}
+
+pub struct Hold {
+    pub end_time: f64
 }
 
 pub struct Slider {

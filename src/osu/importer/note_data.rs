@@ -1,14 +1,15 @@
 use crate::magic;
 use crate::osu::note::{
     HitObject, NoteData, 
-    Circle, Slider, Continuous, 
+    Circle, Slider, Spinner, Hold,
     HitSound
 };
 
 pub fn get_note_data(section: &Vec<String>) -> NoteData {
     let mut circles: Vec<HitObject<Circle>> = vec!();
     let mut sliders: Vec<HitObject<Slider>> = vec!();
-    let mut continuous: Vec<HitObject<Continuous>> = vec!();
+    let mut spinners: Vec<HitObject<Spinner>> = vec!();
+    let mut holds: Vec<HitObject<Hold>> = vec!();
 
     for line in section {
         let split = line.split(",");
@@ -21,13 +22,17 @@ pub fn get_note_data(section: &Vec<String>) -> NoteData {
                 let circle = Circle::from_split(split);
                 circles.push(circle);
             }
-            0b10000000 | 0b1000 | 0b1100 => { // Mania hold | Spinner | New combo spinner
-                let continuous_object = Continuous::from_split(split);
-                continuous.push(continuous_object);
+            0b1000 | 0b1100 => { // Spinner | New combo spinner
+                let spinner = Spinner::from_split(split);
+                spinners.push(spinner);
             }
-            0b10 | 0b110 => { // slider
+            0b10 | 0b110 | 0b10110 => { // slider
                 let slider = Slider::from_split(split);
                 sliders.push(slider);
+            }
+            0b10000000 => { // Hold
+                let hold = Hold::from_split(split);
+                holds.push(hold);
             }
             _ => {
                 println!("UNKNOWN OBJECT {note_type}");
@@ -38,7 +43,8 @@ pub fn get_note_data(section: &Vec<String>) -> NoteData {
     NoteData {
         circles,
         sliders,
-        continuous
+        spinners,
+        holds
     }
 }
 
@@ -69,23 +75,15 @@ impl Circle {
     }
 }
 
-impl Continuous {
+impl Spinner {
     pub fn from_split(split: Vec<&str>) -> HitObject<Self> {
-        let line_end_split = split[5].split(":");
-        let mut line_end_split = line_end_split.collect::<Vec<&str>>();
-        let end_time = magic::convert(line_end_split[0], 0.0);
-        line_end_split.remove(0);
-        let mut hit_sample = String::new();
-        for element in line_end_split {
-            hit_sample.push_str(element);
-        }
-
-        let mut continuous = HitObject::<Self>::from_split(
+        let end_time = magic::convert(split[5], 0.0);
+        let mut spinner = HitObject::<Self>::from_split(
             &split, Self { end_time }
         );
-        continuous.hit_sample = hit_sample;
+        spinner.hit_sample = split[5].to_string();
 
-        return continuous
+        return spinner
     }
 }
 
@@ -94,19 +92,15 @@ impl Slider {
         let params =        split[5].to_string();
         let slides =        magic::convert(&split[6], 0);
         let length =        magic::convert(&split[7], 0.0);
-        let edge_sounds: [HitSound; 2];
-        let edge_sets: [String; 2];
+        let mut edge_sounds: [HitSound; 2] = [HitSound::Normal, HitSound::Normal];
+        let mut edge_sets: [String; 2] = ["0:0".to_string(), "0:0".to_string()];
         let hit_sample: String;
 
         match split.len() {
             8 => {
-                edge_sounds = [HitSound::Normal, HitSound::Normal];
-                edge_sets = ["0:0".to_string(), "0:0".to_string()];
                 hit_sample = String::from("");
             }
             9 => {
-                edge_sounds = [HitSound::Normal, HitSound::Normal];
-                edge_sets = ["0:0".to_string(), "0:0".to_string()];
                 hit_sample = split[8].to_string();
             }
             11 => {
@@ -127,10 +121,8 @@ impl Slider {
                 hit_sample = split[10].to_string();
             }
             _ => {
-                edge_sounds = [HitSound::Normal, HitSound::Normal];
-                edge_sets = ["0:0".to_string(), "0:0".to_string()];
                 hit_sample = String::from("");
-                println!("slider {} len is {}", split[2], split.len())
+                println!("slider {} split.len is {}", split[2], split.len())
             }
         }
 
@@ -146,5 +138,21 @@ impl Slider {
 
         slider.hit_sample = hit_sample;
         return slider;
+    }
+}
+
+impl Hold {
+    pub fn from_split(split: Vec<&str>) -> HitObject<Self> {
+        let mut last = split[5].splitn(2, ":");
+        let end_time = last.next().unwrap_or_else(||"0.0");
+        let end_time = magic::convert(end_time, 0.0);
+        let mut spinner = HitObject::<Self>::from_split(
+            &split, Self { end_time }
+        );
+        spinner.hit_sample = last.next()
+            .unwrap_or_else(||":0:0:0:0:")
+            .to_string();
+
+        return spinner
     }
 }

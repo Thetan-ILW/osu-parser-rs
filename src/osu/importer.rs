@@ -4,8 +4,6 @@ mod note_data;
 
 use std::collections::HashMap;
 
-use crate::magic;
-
 use crate::osu::settings;
 use settings::{Settings};
 

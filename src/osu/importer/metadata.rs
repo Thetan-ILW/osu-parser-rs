@@ -14,7 +14,8 @@ pub fn get_general(section: &Vec<String>) -> General {
 
     let audio_filename = magic::get_value(&data, "AudioFilename", String::new());
     let preview_time = magic::get_value::<f64>(&data, "PreviewTime", 0.0);
-    let countdown = data["Countdown"].parse::<bool>().unwrap_or_else(|_|false);
+    let countdown = magic::get_value::<i8>(&data, "Countdown", 0);
+    let countdown = magic::idiot(countdown, false);
     let sample_set = {
         let value = &data["SampleSet"];
         let value = match data["SampleSet"] {
@@ -31,9 +32,13 @@ pub fn get_general(section: &Vec<String>) -> General {
         let value = magic::get_value::<i8>(&data, "Mode", 4);
         Mode::new(value)
     };
-    let letter_box_in_breaks = data["LetterboxInBreaks"].parse::<bool>().unwrap_or_else(|_|false);
-    let widescreen_storyboard = data["WidescreenStoryboard"].parse::<bool>().unwrap_or_else(|_|false);
-    let samples_match_playback = data["SamplesMatchPlaybackRate"].parse::<bool>().unwrap_or_else(|_|false);
+    let letter_box_in_breaks = magic::get_value::<i8>(&data, "LetterboxInBreaks", 0);
+    let widescreen_storyboard = magic::get_value::<i8>(&data, "WidescreenStoryboard", 0);
+    let samples_match_playback = magic::get_value::<i8>(&data, "SamplesMatchPlaybackRate", 0);
+    
+    let letter_box_in_breaks = magic::idiot(letter_box_in_breaks, false);
+    let widescreen_storyboard = magic::idiot(widescreen_storyboard, false);
+    let samples_match_playback = magic::idiot(samples_match_playback, false);
 
     General{
         audio_filename,
@@ -113,7 +118,7 @@ pub fn get_metadata(section: &Vec<String>) -> Metadata {
     }
 }
 
-pub fn get_events(section: &Vec<String>) -> Events
+pub fn get_events(_section: &Vec<String>) -> Events
 {
     Events {}
 }

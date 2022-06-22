@@ -18,3 +18,11 @@ pub fn convert<T>(string: &str, default_value: T)
             default_value
     });
 }
+
+pub fn idiot(value: i8, default_value: bool) -> bool {
+    match value {
+        0 => false,
+        1 => true,
+        _ => default_value
+    }
+}
