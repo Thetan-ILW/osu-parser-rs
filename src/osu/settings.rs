@@ -1,4 +1,4 @@
-use crate::osu::{Mode, SampleSet};
+use crate::osu::{Mode, SampleSet, OverlayPosition};
 
 pub struct Settings {
     pub general: General,
@@ -10,15 +10,23 @@ pub struct Settings {
 
 pub struct General {
     pub audio_filename: String,
+    pub audio_lead_in: f64,
     pub preview_time: f64,
-    pub countdown: bool,
-    pub sample_set: SampleSet,
-    pub stack_leniency: f32,
-    pub mode: Mode,
+    pub countdown: u32,
+    pub sample_set: SampleSet, 
+    pub stack_leniency: f64,
+    pub mode: Mode, 
     pub letter_box_in_breaks: bool,
+    pub use_skin_sprites: bool,
+    pub overlay_position: OverlayPosition,
+    pub skin_preference: String,
+    pub epilepsy_warning: bool,
+    pub countdown_offset: u32,
+    pub special_style: bool,
     pub widescreen_storyboard: bool,
-    pub samples_match_playback: bool
+    pub samples_match_playback_rate: bool
 }
+
 
 pub struct Editor {
     pub distance_spacing: f32,

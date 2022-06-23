@@ -73,3 +73,22 @@ fn open_file(filename: &str) -> Result<BufReader<File>, std::io::Error> {
     let reader = BufReader::new(file);
     Ok(reader)
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn import_beatmap() {
+        let filename = String::from("test_files/beatmap.osu");
+        let beatmap = crate::import(filename);
+    
+        let beatmap = match beatmap {
+            Ok(beatmap) => beatmap,
+            Err(e) => panic!("|| failed to parse beatmap: {}", e)
+        };
+    
+        let sliders = &beatmap.note_data.sliders;
+        for slider in sliders {
+            println!("TIME = {} | LENGTH: {}", slider.time, slider.other.length);
+        }
+    }
+}

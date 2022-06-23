@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use crate::magic;
-use crate::osu::{Mode, SampleSet};
+use crate::osu::{Mode, SampleSet, OverlayPosition};
 use crate::osu::settings::{
     General, Editor, Metadata, Difficulty, Events
 };
@@ -12,44 +12,92 @@ pub fn get_general(section: &Vec<String>) -> General {
         get_key_value(line, &mut data)
     }
 
-    let audio_filename = magic::get_value(&data, "AudioFilename", String::new());
-    let preview_time = magic::get_value::<f64>(&data, "PreviewTime", 0.0);
-    let countdown = magic::get_value::<i8>(&data, "Countdown", 0);
-    let countdown = magic::idiot(countdown, false);
-    let sample_set = {
-        let value = &data["SampleSet"];
-        let value = match data["SampleSet"] {
-            _ if value == "Default" => 0,
-            _ if value == "Normal" => 1,
-            _ if value == "Soft" => 2,
-            _ if value == "Drum" => 3,
-            _ => 1
-        };
-        SampleSet::new(value)
-    };
-    let stack_leniency = magic::get_value::<f32>(&data, "StackLeniency", 0.0);
-    let mode = {
-        let value = magic::get_value::<i8>(&data, "Mode", 4);
-        Mode::new(value)
-    };
-    let letter_box_in_breaks = magic::get_value::<i8>(&data, "LetterboxInBreaks", 0);
-    let widescreen_storyboard = magic::get_value::<i8>(&data, "WidescreenStoryboard", 0);
-    let samples_match_playback = magic::get_value::<i8>(&data, "SamplesMatchPlaybackRate", 0);
+    let mut bool_data: HashMap<&str, bool> = HashMap::from([
+        ("LetterboxInBreaks",       false), // Key name , Value || Default value
+        ("UseSkinSprites",          false),
+        ("EpilepsyWarning",         false),
+        ("SpecialStyle",            false),
+        ("WidescreenStoryboard",    false),
+        ("SamplesMatchPlaybackRate",false)
+    ]);
     
-    let letter_box_in_breaks = magic::idiot(letter_box_in_breaks, false);
-    let widescreen_storyboard = magic::idiot(widescreen_storyboard, false);
-    let samples_match_playback = magic::idiot(samples_match_playback, false);
+    let mut u32_data: HashMap<&str, u32> = HashMap::from([
+        ("Countdown",   0),
+        ("Mode",        0),
+        ("CountdownOffset", 0)
+    ]);
 
-    General{
+    let mut f64_data: HashMap<&str, f64> = HashMap::from([
+        ("AudioLeadIn", 0.0),
+        ("PreviewTime",     -1.0),
+        ("StackLeniency",   0.7)
+    ]);
+
+    for (name, value) in &mut bool_data {
+        convert_bool(name, value, &data);
+    }
+
+    for (name, value) in &mut u32_data {
+        convert::<u32>(name, value, &data);
+    }
+    
+    for (name, value) in &mut f64_data {
+        convert::<f64>(name, value, &data);
+    }
+
+    let audio_filename          = magic::get_value(&data, "AudioFilename", String::new());
+    let audio_lead_in           = f64_data["AudioLeadIn"];
+    let preview_time            = f64_data["PreviewTime"];
+    let countdown               = u32_data["Countdown"];
+
+    let sample_set              = SampleSet::from_string(
+        magic::get_value(&data, 
+            "SampleSet", 
+            String::new()
+        )
+    );
+
+    let stack_leniency          = f64_data["StackLeniency"];
+    let mode                    = Mode::new(u32_data["Mode"] as i8);
+    let letter_box_in_breaks    = bool_data["LetterboxInBreaks"];
+    let use_skin_sprites        = bool_data["UseSkinSprites"];
+
+    let overlay_position        = OverlayPosition::new(
+        magic::get_value(&data, 
+            "OverlayPosition", 
+            String::new()
+        )
+    );
+
+    let skin_preference         = magic::get_value(
+        &data, 
+        "SkinPreference", 
+        String::new()
+    );
+
+    let epilepsy_warning        = bool_data["EpilepsyWarning"];
+    let countdown_offset        = u32_data["CountdownOffset"];
+    let special_style           = bool_data["SpecialStyle"];
+    let widescreen_storyboard   = bool_data["WidescreenStoryboard"];
+    let samples_match_playback_rate = bool_data["SamplesMatchPlaybackRate"];
+
+    General {
         audio_filename,
+        audio_lead_in,
         preview_time,
         countdown,
         sample_set,
         stack_leniency,
         mode,
         letter_box_in_breaks,
+        use_skin_sprites,
+        overlay_position,
+        skin_preference,
+        epilepsy_warning,
+        countdown_offset,
+        special_style,
         widescreen_storyboard,
-        samples_match_playback
+        samples_match_playback_rate
     }
 }
 
@@ -123,7 +171,45 @@ pub fn get_events(_section: &Vec<String>) -> Events
     Events {}
 }
 
+fn convert<T: std::str::FromStr>(name: &str, value: &mut T, data: &HashMap::<String, String>) {
+    let string = data.get(name);
+    let string = match string {
+        Some(string) => string,
+        None => {
+            println!("{name} not found");
+            return;
+        }
+    };
 
+    let new_value = string.parse::<T>();
+    match new_value {
+        Ok(new_value) => *value = new_value,
+        Err(_) => {
+            println!("failed to read {name}");
+            return;
+        }
+    };
+}
+
+fn convert_bool(name: &str, value: &mut bool, data: &HashMap::<String,String>) {
+    let string = data.get(name);
+    let string = match string {
+        Some(string) => string,
+        None => {
+            println!("{name} not found");
+            return
+        }
+    };
+
+    match string {
+        _ if string == "0" => *value = false,
+        _ if string == "1" => *value = true,
+        _ => {
+            println!("failed to read {name}");
+            return;
+        }
+    };
+}
 
 fn get_key_value(line: &String, data: &mut HashMap<String, String>) {
     let key_value = line.split(":");
