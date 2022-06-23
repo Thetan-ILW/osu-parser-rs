@@ -86,9 +86,6 @@ mod tests {
             Err(e) => panic!("|| failed to parse beatmap: {}", e)
         };
     
-        let sliders = &beatmap.note_data.sliders;
-        for slider in sliders {
-            println!("TIME = {} | LENGTH: {}", slider.time, slider.other.length);
-        }
+        assert_eq!(beatmap.settings.difficulty.approach_rate, 6.9 as f32)
     }
 }

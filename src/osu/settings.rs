@@ -29,6 +29,7 @@ pub struct General {
 
 
 pub struct Editor {
+    pub bookmarks: Vec<f64>,
     pub distance_spacing: f32,
     pub beat_divisor: f32,
     pub grid_size: f32,
@@ -41,7 +42,11 @@ pub struct Metadata {
     pub artist: String,
     pub artist_unicode: String,
     pub creator: String,
-    pub version: String
+    pub version: String,
+    pub source: String,
+    pub tags: Vec<String>,
+    pub beatmap_id: i32,
+    pub beatmap_set_id: i32
 }
 
 pub struct Difficulty {
