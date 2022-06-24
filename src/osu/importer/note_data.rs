@@ -1,4 +1,4 @@
-use crate::magic;
+use crate::osu::importer::helpers;
 use crate::osu::note::{
     HitObject, NoteData, 
     Circle, Slider, Spinner, Hold,
@@ -15,7 +15,7 @@ pub fn get_note_data(section: &Vec<String>) -> NoteData {
         let split = line.split(",");
         let split = split.collect::<Vec<&str>>();
 
-        let note_type = magic::convert::<u8>(&split[3], 1);
+        let note_type = helpers::convert::<u8>(&split[3], 1);
 
         match note_type {
             0b1 | 0b101 => { // Circle | New combo circle | ShortNote
@@ -50,11 +50,11 @@ pub fn get_note_data(section: &Vec<String>) -> NoteData {
 
 impl<T> HitObject<T> {
     pub fn from_split(split: &Vec<&str>, other: T) -> Self {
-        let x =         magic::convert::<f32>(&split[0], 0.0);
-        let y =         magic::convert::<f32>(&split[1], 0.0);
-        let time =      magic::convert(&split[2], 0.0);
-        let note_type = magic::convert::<u8>(&split[3], 0);
-        let hit_sound:  HitSound = HitSound::new(magic::convert::<u8>(&split[4], 0));
+        let x =         helpers::convert::<f32>(&split[0], 0.0);
+        let y =         helpers::convert::<f32>(&split[1], 0.0);
+        let time =      helpers::convert(&split[2], 0.0);
+        let note_type = helpers::convert::<u8>(&split[3], 0);
+        let hit_sound:  HitSound = HitSound::new(helpers::convert::<u8>(&split[4], 0));
         let hit_sample = String::new();
         
         Self {
@@ -77,7 +77,7 @@ impl Circle {
 
 impl Spinner {
     pub fn from_split(split: Vec<&str>) -> HitObject<Self> {
-        let end_time = magic::convert(split[5], 0.0);
+        let end_time = helpers::convert(split[5], 0.0);
         let mut spinner = HitObject::<Self>::from_split(
             &split, Self { end_time }
         );
@@ -90,8 +90,8 @@ impl Spinner {
 impl Slider {
     pub fn from_split(split: Vec<&str>) -> HitObject<Self> {
         let params =        split[5].to_string();
-        let slides =        magic::convert(&split[6], 0);
-        let length =        magic::convert(&split[7], 0.0);
+        let slides =        helpers::convert(&split[6], 0);
+        let length =        helpers::convert(&split[7], 0.0);
         let mut edge_sounds: [HitSound; 2] = [HitSound::Normal, HitSound::Normal];
         let mut edge_sets: [String; 2] = ["0:0".to_string(), "0:0".to_string()];
         let hit_sample: String;
@@ -107,8 +107,8 @@ impl Slider {
                 let help_me = split[8].split("|");
                 let help_me = help_me.collect::<Vec<&str>>();
                 edge_sounds = [
-                    HitSound::new(magic::convert::<u8>(help_me[0], 0)),
-                    HitSound::new(magic::convert::<u8>(help_me[1], 0)),
+                    HitSound::new(helpers::convert::<u8>(help_me[0], 0)),
+                    HitSound::new(helpers::convert::<u8>(help_me[1], 0)),
                 ];
     
                 let help_me = split[9].split("|");
@@ -145,7 +145,7 @@ impl Hold {
     pub fn from_split(split: Vec<&str>) -> HitObject<Self> {
         let mut last = split[5].splitn(2, ":");
         let end_time = last.next().unwrap_or_else(||"0.0");
-        let end_time = magic::convert(end_time, 0.0);
+        let end_time = helpers::convert(end_time, 0.0);
         let mut hold = HitObject::<Self>::from_split(
             &split, Self { end_time }
         );

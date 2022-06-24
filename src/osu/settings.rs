@@ -60,3 +60,5 @@ pub struct Difficulty {
 
 pub struct Events {}
 
+pub struct Color(u8, u8, u8);
+

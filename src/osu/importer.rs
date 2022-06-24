@@ -1,6 +1,8 @@
 mod metadata; // rename this
 mod timing_data;
 mod note_data;
+mod misc;
+mod helpers;
 
 use std::collections::HashMap;
 
@@ -15,7 +17,7 @@ pub fn get_settings(sections: &HashMap<String, Vec<String>>) -> Settings {
     let editor = metadata::get_editor(&sections["[Editor]"]);
     let metadata = metadata::get_metadata(&sections["[Metadata]"]);
     let difficulty = metadata::get_difficulty(&sections["[Difficulty]"]);
-    let events = metadata::get_events(&sections["[Events]"]);
+    let events = misc::get_events(&sections["[Events]"]);
 
     Settings {
         general,
