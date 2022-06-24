@@ -4,7 +4,6 @@ use std::io::{prelude::*, BufReader};
 use std::collections::HashMap;
 
 mod osu;
-mod magic;
 use osu::Beatmap;
 use osu::importer;
 
@@ -89,5 +88,21 @@ mod tests {
         assert_eq!(beatmap.settings.difficulty.approach_rate, 6.9 as f32);
         assert_eq!(beatmap.settings.general.letter_box_in_breaks, false);
         assert_eq!(beatmap.settings.general.samples_match_playback_rate, true);
+    }
+    #[test]
+    fn color_test() {
+        let filename = String::from("test_files/ignore/colortest.osu");
+        let beatmap = crate::import(filename);
+    
+        let beatmap = match beatmap {
+            Ok(beatmap) => beatmap,
+            Err(e) => panic!("|| failed to parse beatmap: {}", e)
+        };
+
+        let color = beatmap.settings.colors[0].clone();
+
+        assert_eq!(color.0, 69);
+        assert_eq!(color.1, 228);
+        assert_eq!(color.2, 13);
     }
 }

@@ -18,13 +18,15 @@ pub fn get_settings(sections: &HashMap<String, Vec<String>>) -> Settings {
     let metadata = metadata::get_metadata(&sections["[Metadata]"]);
     let difficulty = metadata::get_difficulty(&sections["[Difficulty]"]);
     let events = misc::get_events(&sections["[Events]"]);
+    let colors = misc::get_colors(&sections["[Colours]"]);
 
     Settings {
         general,
         editor,
         metadata,
         difficulty,
-        events
+        events,
+        colors
     }
 }
 

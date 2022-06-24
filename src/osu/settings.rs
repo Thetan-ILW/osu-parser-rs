@@ -5,7 +5,8 @@ pub struct Settings {
     pub editor: Editor,
     pub metadata: Metadata,
     pub difficulty: Difficulty,
-    pub events: Events
+    pub events: Events,
+    pub colors: Vec<Color>
 }
 
 pub struct General {
@@ -60,5 +61,6 @@ pub struct Difficulty {
 
 pub struct Events {}
 
-pub struct Color(u8, u8, u8);
+#[derive(Clone)]
+pub struct Color(pub u8, pub u8, pub u8);
 

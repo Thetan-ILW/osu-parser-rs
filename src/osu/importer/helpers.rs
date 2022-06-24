@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, BTreeMap};
 
 pub fn convert<T>(string: &str, default_value: T) 
     -> T where T: std::str::FromStr {
@@ -53,6 +53,21 @@ pub fn get_safely(data: &HashMap<String, String>, name: &str) -> String {
 
 // Split [KEY:VALUE] and insert it to hashmap
 pub fn get_key_value(section: &Vec<String>, data: &mut HashMap<String, String>) {
+    for line in section {
+        let key_value = line.split(":");
+        let key_value = key_value.collect::<Vec<&str>>();
+    
+        if key_value.len() == 2 {
+            data.insert(
+                key_value[0].trim().to_string(), 
+                key_value[1].trim().to_string()
+            );
+        }
+    }
+}
+
+// hmmmmm, ш will come up with a solution tomorrow
+pub fn get_key_value_btreemap(section: &Vec<String>, data: &mut BTreeMap<String, String>) {
     for line in section {
         let key_value = line.split(":");
         let key_value = key_value.collect::<Vec<&str>>();
