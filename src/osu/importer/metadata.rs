@@ -5,8 +5,8 @@ use crate::osu::settings::{
 };
 
 pub fn get_general(section: &Vec<String>) -> General {
-    let mut data: HashMap<String, String> = HashMap::new();
-    get_key_value(section, &mut data);
+    let mut section_data: HashMap<String, String> = HashMap::new();
+    get_key_value(section, &mut section_data);
 
     let mut bool_data: HashMap<&str, bool> = HashMap::from([
         ("LetterboxInBreaks",       false), // Key name , Value || Default value
@@ -29,25 +29,17 @@ pub fn get_general(section: &Vec<String>) -> General {
         ("StackLeniency",   0.7)
     ]);
 
-    for (name, value) in &mut bool_data {
-        parse_and_set_bool(name, value, &data);
-    }
+    parse_and_set_bool(&mut bool_data, &section_data);
+    parse_and_set(&mut u32_data, &section_data);
+    parse_and_set(&mut f64_data, &section_data);
 
-    for (name, value) in &mut u32_data {
-        parse_and_set::<u32>(name, value, &data);
-    }
-    
-    for (name, value) in &mut f64_data {
-        parse_and_set::<f64>(name, value, &data);
-    }
-
-    let audio_filename          = get_safely(&data, "AudioFilename");
+    let audio_filename          = get_safely(&section_data, "AudioFilename");
     let audio_lead_in           = f64_data["AudioLeadIn"];
     let preview_time            = f64_data["PreviewTime"];
     let countdown               = u32_data["Countdown"];
 
     let sample_set = SampleSet::from_string(
-        get_safely(&data, "SampleSet")
+        get_safely(&section_data, "SampleSet")
     );
 
     let stack_leniency          = f64_data["StackLeniency"];
@@ -56,10 +48,10 @@ pub fn get_general(section: &Vec<String>) -> General {
     let use_skin_sprites        = bool_data["UseSkinSprites"];
 
     let overlay_position = OverlayPosition::new(
-        get_safely(&data, "OverlayPosition")
+        get_safely(&section_data, "OverlayPosition")
     );
 
-    let skin_preference         = get_safely(&data, "SkinPreference");
+    let skin_preference         = get_safely(&section_data, "SkinPreference");
     let epilepsy_warning        = bool_data["EpilepsyWarning"];
     let countdown_offset        = u32_data["CountdownOffset"];
     let special_style           = bool_data["SpecialStyle"];
@@ -87,8 +79,8 @@ pub fn get_general(section: &Vec<String>) -> General {
 }
 
 pub fn get_editor(section: &Vec<String>) -> Editor {
-    let mut data: HashMap<String, String> = HashMap::new();
-    get_key_value(section, &mut data);
+    let mut section_data: HashMap<String, String> = HashMap::new();
+    get_key_value(section, &mut section_data);
 
     let mut f32_data: HashMap<&str, f32> = HashMap::from([
         ("DistanceSpacing", 1.0),
@@ -97,11 +89,9 @@ pub fn get_editor(section: &Vec<String>) -> Editor {
         ("TimelineZoom",    1.0)
     ]);
 
-    for (name, value) in &mut f32_data {
-        parse_and_set::<f32>(name, value, &data);
-    }
+    parse_and_set(&mut f32_data, &section_data);
 
-    let bookmarks_list = get_safely(&data, "Bookmarks");
+    let bookmarks_list = get_safely(&section_data, "Bookmarks");
     let bookmarks_list: Vec<&str> = bookmarks_list.split(",").collect();
     let mut bookmarks: Vec<f64> = vec!();
     if bookmarks_list.len() > 1 {
@@ -127,27 +117,25 @@ pub fn get_editor(section: &Vec<String>) -> Editor {
 }
 
 pub fn get_metadata(section: &Vec<String>) -> Metadata {
-    let mut data: HashMap<String, String> = HashMap::new();
-    get_key_value(section, &mut data);
+    let mut section_data: HashMap<String, String> = HashMap::new();
+    get_key_value(section, &mut section_data);
 
     let mut i32_data: HashMap<&str, i32> = HashMap::from([
         ("BeatmapID", 0),
         ("BeatmapSetID", 0)
     ]);
 
-    for (name, value) in &mut i32_data {
-        parse_and_set::<i32>(name, value, &data);
-    }
+    parse_and_set(&mut i32_data, &section_data);
 
-    let title           = get_safely(&data, "Title");
-    let title_unicode   = get_safely(&data, "TitleUnicode");
-    let artist          = get_safely(&data, "Artist");
-    let artist_unicode  = get_safely(&data, "ArtistUnicode");
-    let creator         = get_safely(&data, "Creator");
-    let version         = get_safely(&data, "Version");
-    let source          = get_safely(&data, "Source");  
+    let title           = get_safely(&section_data, "Title");
+    let title_unicode   = get_safely(&section_data, "TitleUnicode");
+    let artist          = get_safely(&section_data, "Artist");
+    let artist_unicode  = get_safely(&section_data, "ArtistUnicode");
+    let creator         = get_safely(&section_data, "Creator");
+    let version         = get_safely(&section_data, "Version");
+    let source          = get_safely(&section_data, "Source");  
     
-    let tags = get_safely(&data, "Tags");
+    let tags = get_safely(&section_data, "Tags");
     let tags: Vec<&str> = tags.split(" ").collect();
     let tags: Vec<String> = tags.iter()
         .map(|&s|s.into())
@@ -171,8 +159,8 @@ pub fn get_metadata(section: &Vec<String>) -> Metadata {
 }
 
 pub fn get_difficulty(section: &Vec<String>) -> Difficulty {
-    let mut data: HashMap<String, String> = HashMap::new();
-    get_key_value(section, &mut data);
+    let mut section_data: HashMap<String, String> = HashMap::new();
+    get_key_value(section, &mut section_data);
 
     let mut f32_data: HashMap<&str, f32> = HashMap::from([
         ("HPDrainRate", 5.0),
@@ -183,9 +171,7 @@ pub fn get_difficulty(section: &Vec<String>) -> Difficulty {
         ("SliderTickRate", 1.0)
     ]);
 
-    for (name, value) in &mut f32_data {
-        parse_and_set::<f32>(name, value, &data);
-    }
+    parse_and_set(&mut f32_data, &section_data);
 
     let hp_drain_rate =         f32_data["HPDrainRate"];
     let circle_size =           f32_data["CircleSize"];
@@ -210,31 +196,27 @@ pub fn get_events(_section: &Vec<String>) -> Events
 }
 
 // works with numbers only
-fn parse_and_set<T: std::str::FromStr>(name: &str, value: &mut T, data: &HashMap::<String, String>) {
-    let s = get_safely(data, name);
-    let new_value = s.parse::<T>();
-    
-    match new_value {
-        Ok(new_value) => *value = new_value,
-        Err(_) => {
-            println!("failed to read {name}");
-            return;
-        }
-    };
+fn parse_and_set<T: std::str::FromStr>(value_data: &mut HashMap<&str, T>, section_data: &HashMap::<String,String>) {
+    for (name, value) in value_data {
+        let s = get_safely(section_data, name);
+        let new_value = s.parse::<T>();
+        match new_value {
+            Ok(new_value) => *value = new_value,
+            Err(_) => { println!("failed to read {name}") }
+        };
+    }
 }
 
 // idk
-fn parse_and_set_bool(name: &str, value: &mut bool, data: &HashMap::<String,String>) {
-    let s = get_safely(data, name);
-
-    match s {
-        _ if s == "0" => *value = false,
-        _ if s == "1" => *value = true,
-        _ => {
-            println!("failed to read {name}");
-            return;
-        }
-    };
+fn parse_and_set_bool(value_data: &mut HashMap<&str, bool>, section_data: &HashMap::<String,String>) {
+    for (name, value) in value_data {
+        let s = get_safely(section_data, *name);
+        match s {
+            _ if s == "0" => *value = false,
+            _ if s == "1" => *value = true,
+            _ => { println!("failed to read {name}") }
+        };
+    }
 }
 
 // Get the value from hashmap, if there is no or an error then return default value
