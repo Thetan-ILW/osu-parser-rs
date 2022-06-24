@@ -146,13 +146,13 @@ impl Hold {
         let mut last = split[5].splitn(2, ":");
         let end_time = last.next().unwrap_or_else(||"0.0");
         let end_time = magic::convert(end_time, 0.0);
-        let mut spinner = HitObject::<Self>::from_split(
+        let mut hold = HitObject::<Self>::from_split(
             &split, Self { end_time }
         );
-        spinner.hit_sample = last.next()
+        hold.hit_sample = last.next()
             .unwrap_or_else(||":0:0:0:0:")
             .to_string();
 
-        return spinner
+        return hold
     }
 }

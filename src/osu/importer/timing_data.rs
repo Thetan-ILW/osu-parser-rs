@@ -8,6 +8,7 @@ pub fn get_timing_points(section: &Vec<String>) -> Vec<TimePoint> {
         let split = split.collect::<Vec<&str>>();
 
         if split.len() != 8{
+            println!("not valid time point: {line}");
             continue; // If the line is not valid time point array
         }
 

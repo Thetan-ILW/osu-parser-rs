@@ -202,7 +202,11 @@ fn parse_and_set<T: std::str::FromStr>(value_data: &mut HashMap<&str, T>, sectio
         let new_value = s.parse::<T>();
         match new_value {
             Ok(new_value) => *value = new_value,
-            Err(_) => { println!("failed to read {name}") }
+            Err(_) => { 
+                if s.len() != 0 {
+                    println!("Error: failed to read {name}") 
+                }
+            }
         };
     }
 }
@@ -214,7 +218,11 @@ fn parse_and_set_bool(value_data: &mut HashMap<&str, bool>, section_data: &HashM
         match s {
             _ if s == "0" => *value = false,
             _ if s == "1" => *value = true,
-            _ => { println!("failed to read {name}") }
+            _ => { 
+                if s.len() != 0 {
+                    println!("Error: failed to read {name}") 
+                }
+            }
         };
     }
 }
@@ -225,7 +233,6 @@ pub fn get_safely(data: &HashMap<String, String>, name: &str) -> String {
     match data.contains_key(name) {
         true => return data[name].clone(),
         false => {
-            println!("key {name} does not exist");
             return String::new()
         }
     }
