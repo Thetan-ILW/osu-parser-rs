@@ -23,9 +23,9 @@ pub fn get_colors(section: &Vec<String>) -> Vec<Color> {
             continue;
         }
 
-        let r = helpers::convert::<u8>(split[0], 255);
-        let g = helpers::convert::<u8>(split[1], 255);
-        let b = helpers::convert::<u8>(split[2], 255);
+        let r = split[0].parse().unwrap_or_else(|_|255);
+        let g = split[1].parse().unwrap_or_else(|_|255);
+        let b = split[2].parse().unwrap_or_else(|_|255);
 
         colors.push(Color(r, g, b));
     }

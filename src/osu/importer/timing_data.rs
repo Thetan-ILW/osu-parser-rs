@@ -14,17 +14,18 @@ pub fn get_timing_points(section: &Vec<String>) -> Vec<TimePoint> {
             continue; // If the line is not valid time point array
         }
 
-        let time = helpers::convert(&split[0], 0.0);
-        let beat_length = helpers::convert(&split[1], 0.0);
-        let meter = helpers::convert(&split[2], 0);
+        let time =          split[0].parse().unwrap_or_else(|_|0.0);
+        let beat_length =   split[1].parse().unwrap_or_else(|_|0.0);
+        let meter =         split[2].parse().unwrap_or_else(|_|0);
 
-        let sample_set = helpers::convert(&split[3], 0);
-        let sample_set = SampleSet::new(sample_set);
+        let sample_set =    split[3].parse().unwrap_or_else(|_|0);
+        let sample_set =    SampleSet::new(sample_set);
 
-        let sample_index = helpers::convert(&split[4], 0);
-        let volume = helpers::convert(&split[5], 100.0);
-        let uninherited = split[6].parse::<bool>().unwrap_or_else(|_|true); // idiot
-        let effects = helpers::convert::<u8>(&split[7], 0);
+        let sample_index =  split[4].parse().unwrap_or_else(|_|0);
+        let volume =        split[5].parse().unwrap_or_else(|_|100.0);
+        let uninherited =   split[6].parse().unwrap_or_else(|_|true);
+        let effects =       split[7].parse().unwrap_or_else(|_|0);
+
         let time_point = TimePoint {
             time,
             beat_length,

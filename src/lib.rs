@@ -8,12 +8,7 @@ use osu::Beatmap;
 use osu::importer;
 
 pub fn import(filename: String) -> Result<Beatmap, Error> {
-    let reader = open_file(&filename);
-    let reader = match reader {
-        Ok(reader) => reader,
-        Err(e) => panic!("Failed to read file: {filename} | {e}")
-    };
-
+    let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
 
     let settings = importer::get_settings(&data);
@@ -32,11 +27,8 @@ fn get_sections(reader: BufReader<File>) -> Result<HashMap<String, Vec<String>>,
     let mut current_section: String = String::new();
 
     for line in reader.lines() {
-        let line = match line {
-            Ok(line) => line,
-            Err(e) => return Err(e)
-        };
-
+        let line = line?;
+        
         if line.len() == 0 {
             continue;
         }

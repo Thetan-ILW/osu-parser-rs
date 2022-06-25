@@ -1,13 +1,5 @@
 use std::collections::{HashMap, BTreeMap};
 
-pub fn convert<T>(string: &str, default_value: T) 
-    -> T where T: std::str::FromStr {
-    return string.parse::<T>().unwrap_or_else(|_| {
-        println!("Error: failed to convert value {string}"); 
-        default_value
-    });
-}
-
 // works with numbers only
 pub fn parse_and_set<T: std::str::FromStr>(value_data: &mut HashMap<&str, T>, section_data: &HashMap::<String,String>) {
     for (name, value) in value_data {
