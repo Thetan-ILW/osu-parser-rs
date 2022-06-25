@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 use crate::osu::settings::{Events, Color};
-use crate::osu::importer::helpers;
+use crate::osu::importer::key_value;
 
 pub fn get_events(_section: &Vec<String>) -> Events {
     Events {}
@@ -12,7 +12,7 @@ pub fn get_colors(section: &Vec<String>) -> Vec<Color> {
     }
 
     let mut section_data: BTreeMap<String, String> = BTreeMap::new();
-    helpers::get_key_value(section, &mut section_data);
+    key_value::get_key_value(section, &mut section_data);
 
     let mut colors: Vec<Color> = vec!();
 

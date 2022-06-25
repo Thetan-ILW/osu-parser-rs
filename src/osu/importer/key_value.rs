@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+// This is a module that allows you to work safely with key value pairs
 
 // works with numbers only
 pub fn parse_and_set<T: std::str::FromStr>(value_data: &mut BTreeMap<&str, T>, section_data: &BTreeMap::<String,String>) {

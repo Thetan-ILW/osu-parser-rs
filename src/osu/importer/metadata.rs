@@ -1,11 +1,11 @@
 use std::collections::BTreeMap;
 use crate::osu::{Mode, SampleSet, OverlayPosition};
 use crate::osu::settings::{General, Editor, Metadata, Difficulty};
-use crate::osu::importer::helpers;
+use crate::osu::importer::key_value;
 
 pub fn get_general(section: &Vec<String>) -> General {
     let mut section_data: BTreeMap<String, String> = BTreeMap::new();
-    helpers::get_key_value(section, &mut section_data);
+    key_value::get_key_value(section, &mut section_data);
 
     let mut bool_data: BTreeMap<&str, bool> = BTreeMap::from([
         ("LetterboxInBreaks",       false), // Key name , Value || Default value
@@ -28,17 +28,17 @@ pub fn get_general(section: &Vec<String>) -> General {
         ("StackLeniency",   0.7)
     ]);
 
-    helpers::parse_and_set_bool(&mut bool_data, &section_data);
-    helpers::parse_and_set(&mut u32_data, &section_data);
-    helpers::parse_and_set(&mut f64_data, &section_data);
+    key_value::parse_and_set_bool(&mut bool_data, &section_data);
+    key_value::parse_and_set(&mut u32_data, &section_data);
+    key_value::parse_and_set(&mut f64_data, &section_data);
 
-    let audio_filename          = helpers::get_safely(&section_data, "AudioFilename");
+    let audio_filename          = key_value::get_safely(&section_data, "AudioFilename");
     let audio_lead_in           = f64_data["AudioLeadIn"];
     let preview_time            = f64_data["PreviewTime"];
     let countdown               = u32_data["Countdown"];
 
     let sample_set = SampleSet::from_string(
-        helpers::get_safely(&section_data, "SampleSet")
+        key_value::get_safely(&section_data, "SampleSet")
     );
 
     let stack_leniency          = f64_data["StackLeniency"];
@@ -47,10 +47,10 @@ pub fn get_general(section: &Vec<String>) -> General {
     let use_skin_sprites        = bool_data["UseSkinSprites"];
 
     let overlay_position = OverlayPosition::new(
-        helpers::get_safely(&section_data, "OverlayPosition")
+        key_value::get_safely(&section_data, "OverlayPosition")
     );
 
-    let skin_preference         = helpers::get_safely(&section_data, "SkinPreference");
+    let skin_preference         = key_value::get_safely(&section_data, "SkinPreference");
     let epilepsy_warning        = bool_data["EpilepsyWarning"];
     let countdown_offset        = u32_data["CountdownOffset"];
     let special_style           = bool_data["SpecialStyle"];
@@ -79,7 +79,7 @@ pub fn get_general(section: &Vec<String>) -> General {
 
 pub fn get_editor(section: &Vec<String>) -> Editor {
     let mut section_data: BTreeMap<String, String> = BTreeMap::new();
-    helpers::get_key_value(section, &mut section_data);
+    key_value::get_key_value(section, &mut section_data);
 
     let mut f32_data: BTreeMap<&str, f32> = BTreeMap::from([
         ("DistanceSpacing", 1.0),
@@ -88,9 +88,9 @@ pub fn get_editor(section: &Vec<String>) -> Editor {
         ("TimelineZoom",    1.0)
     ]);
 
-    helpers::parse_and_set(&mut f32_data, &section_data);
+    key_value::parse_and_set(&mut f32_data, &section_data);
 
-    let bookmarks_list = helpers::get_safely(&section_data, "Bookmarks");
+    let bookmarks_list = key_value::get_safely(&section_data, "Bookmarks");
     let bookmarks_list: Vec<&str> = bookmarks_list.split(",").collect();
     let mut bookmarks: Vec<f64> = vec!();
     if bookmarks_list.len() > 1 {
@@ -117,24 +117,24 @@ pub fn get_editor(section: &Vec<String>) -> Editor {
 
 pub fn get_metadata(section: &Vec<String>) -> Metadata {
     let mut section_data: BTreeMap<String, String> = BTreeMap::new();
-    helpers::get_key_value(section, &mut section_data);
+    key_value::get_key_value(section, &mut section_data);
 
     let mut i32_data: BTreeMap<&str, i32> = BTreeMap::from([
         ("BeatmapID", 0),
         ("BeatmapSetID", 0)
     ]);
 
-    helpers::parse_and_set(&mut i32_data, &section_data);
+    key_value::parse_and_set(&mut i32_data, &section_data);
 
-    let title           = helpers::get_safely(&section_data, "Title");
-    let title_unicode   = helpers::get_safely(&section_data, "TitleUnicode");
-    let artist          = helpers::get_safely(&section_data, "Artist");
-    let artist_unicode  = helpers::get_safely(&section_data, "ArtistUnicode");
-    let creator         = helpers::get_safely(&section_data, "Creator");
-    let version         = helpers::get_safely(&section_data, "Version");
-    let source          = helpers::get_safely(&section_data, "Source");  
+    let title           = key_value::get_safely(&section_data, "Title");
+    let title_unicode   = key_value::get_safely(&section_data, "TitleUnicode");
+    let artist          = key_value::get_safely(&section_data, "Artist");
+    let artist_unicode  = key_value::get_safely(&section_data, "ArtistUnicode");
+    let creator         = key_value::get_safely(&section_data, "Creator");
+    let version         = key_value::get_safely(&section_data, "Version");
+    let source          = key_value::get_safely(&section_data, "Source");  
     
-    let tags = helpers::get_safely(&section_data, "Tags");
+    let tags = key_value::get_safely(&section_data, "Tags");
     let tags: Vec<&str> = tags.split(" ").collect();
     let tags: Vec<String> = tags.iter()
         .map(|&s|s.into())
@@ -159,7 +159,7 @@ pub fn get_metadata(section: &Vec<String>) -> Metadata {
 
 pub fn get_difficulty(section: &Vec<String>) -> Difficulty {
     let mut section_data: BTreeMap<String, String> = BTreeMap::new();
-    helpers::get_key_value(section, &mut section_data);
+    key_value::get_key_value(section, &mut section_data);
 
     let mut f32_data: BTreeMap<&str, f32> = BTreeMap::from([
         ("HPDrainRate", 5.0),
@@ -170,7 +170,7 @@ pub fn get_difficulty(section: &Vec<String>) -> Difficulty {
         ("SliderTickRate", 1.0)
     ]);
 
-    helpers::parse_and_set(&mut f32_data, &section_data);
+    key_value::parse_and_set(&mut f32_data, &section_data);
 
     let hp_drain_rate =         f32_data["HPDrainRate"];
     let circle_size =           f32_data["CircleSize"];
