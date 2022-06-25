@@ -1,15 +1,16 @@
-pub mod importer;
 pub mod exporter;
+pub mod importer;
+pub mod note;
 pub mod settings;
 pub mod timing;
-pub mod note;
+pub mod defaults;
 
 pub enum Mode {
     Osu,
     Taiko,
     Fruits,
     Mania,
-    Unknown
+    Unknown,
 }
 
 impl Mode {
@@ -19,7 +20,7 @@ impl Mode {
             1 => Mode::Taiko,
             2 => Mode::Fruits,
             3 => Mode::Mania,
-            _ => Mode::Unknown
+            _ => Mode::Unknown,
         }
     }
 }
@@ -28,7 +29,7 @@ pub enum SampleSet {
     Default,
     Normal,
     Soft,
-    Drum
+    Drum,
 }
 
 impl SampleSet {
@@ -38,7 +39,7 @@ impl SampleSet {
             1 => SampleSet::Normal,
             2 => SampleSet::Soft,
             3 => SampleSet::Drum,
-            _ => SampleSet::Default
+            _ => SampleSet::Default,
         }
     }
 
@@ -48,7 +49,7 @@ impl SampleSet {
             _ if value == "Normal" => 1,
             _ if value == "Soft" => 2,
             _ if value == "Drum" => 3,
-            _ => 0
+            _ => 0,
         };
 
         Self::new(value)
@@ -58,16 +59,16 @@ impl SampleSet {
 pub enum OverlayPosition {
     NoChange,
     Below,
-    Above
+    Above,
 }
 
 impl OverlayPosition {
     pub fn new(string: String) -> Self {
-        match string{
+        match string {
             _ if string == "NoChange" => Self::NoChange,
             _ if string == "Below" => Self::Below,
             _ if string == "Above" => Self::Above,
-            _ => Self::NoChange
+            _ => Self::NoChange,
         }
     }
 }
@@ -75,5 +76,5 @@ impl OverlayPosition {
 pub struct Beatmap {
     pub settings: settings::Settings,
     pub timing_data: Vec<timing::TimePoint>,
-    pub note_data: note::NoteData
+    pub note_data: note::NoteData,
 }

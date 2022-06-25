@@ -1,11 +1,11 @@
-use std::io::Error;
-use std::fs::File;
-use std::io::{prelude::*, BufReader};
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::Error;
+use std::io::{prelude::*, BufReader};
 
 mod osu;
-use osu::Beatmap;
 use osu::importer;
+use osu::Beatmap;
 
 pub fn import(filename: String) -> Result<Beatmap, Error> {
     let reader = open_file(&filename)?;
@@ -18,24 +18,24 @@ pub fn import(filename: String) -> Result<Beatmap, Error> {
     return Ok(Beatmap {
         settings,
         timing_data,
-        note_data
-    })
+        note_data,
+    });
 }
 
-fn get_sections(reader: BufReader<File>) -> Result<HashMap<String, Vec<String>>, Error> { 
+fn get_sections(reader: BufReader<File>) -> Result<HashMap<String, Vec<String>>, Error> {
     let mut data: HashMap<String, Vec<String>> = HashMap::new();
     let mut current_section: String = String::new();
 
     for line in reader.lines() {
         let line = line?;
-        
+
         if line.len() == 0 {
             continue;
         }
 
         if is_section_line(&line) {
             current_section = line.clone();
-            data.insert(line, vec!());
+            data.insert(line, vec![]);
             continue;
         }
 
@@ -45,7 +45,7 @@ fn get_sections(reader: BufReader<File>) -> Result<HashMap<String, Vec<String>>,
         }
     }
 
-    return Ok(data)
+    return Ok(data);
 }
 
 fn is_section_line(line: &String) -> bool {
@@ -53,10 +53,10 @@ fn is_section_line(line: &String) -> bool {
     let last_char = line.chars().last().unwrap();
 
     if first_char == '[' && last_char == ']' {
-        return true
+        return true;
     }
 
-    return false
+    return false;
 }
 
 fn open_file(filename: &str) -> Result<BufReader<File>, std::io::Error> {
@@ -71,12 +71,12 @@ mod tests {
     fn import_beatmap() {
         let filename = String::from("test_files/beatmap.osu");
         let beatmap = crate::import(filename);
-    
+
         let beatmap = match beatmap {
             Ok(beatmap) => beatmap,
-            Err(e) => panic!("|| failed to parse beatmap: {}", e)
+            Err(e) => panic!("|| failed to parse beatmap: {}", e),
         };
-    
+
         assert_eq!(beatmap.settings.difficulty.approach_rate, 6.9 as f32);
         assert_eq!(beatmap.settings.general.letter_box_in_breaks, false);
         assert_eq!(beatmap.settings.general.samples_match_playback_rate, true);
@@ -85,10 +85,10 @@ mod tests {
     fn color_test() {
         let filename = String::from("test_files/ignore/colortest.osu");
         let beatmap = crate::import(filename);
-    
+
         let beatmap = match beatmap {
             Ok(beatmap) => beatmap,
-            Err(e) => panic!("|| failed to parse beatmap: {}", e)
+            Err(e) => panic!("|| failed to parse beatmap: {}", e),
         };
 
         let color = beatmap.settings.colors[0].clone();

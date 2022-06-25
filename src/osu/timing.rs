@@ -8,5 +8,5 @@ pub struct TimePoint {
     pub sample_index: u32,
     pub volume: f32,
     pub uninherited: bool,
-    pub effects: u8
+    pub effects: u8,
 }
