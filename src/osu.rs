@@ -3,7 +3,6 @@ pub mod importer;
 pub mod note;
 pub mod settings;
 pub mod timing;
-pub mod defaults;
 
 pub enum Mode {
     Osu,

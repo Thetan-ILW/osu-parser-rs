@@ -102,4 +102,25 @@ mod tests {
         assert_eq!(slider.y, 353.0);
         assert_eq!(slider.time, 595.0);
     }
+    #[test]
+    fn open_blank_beatmap() {
+        let filename = String::from("test_files/blank.osu");
+        let beatmap = crate::import(filename);
+
+        let _beatmap = match beatmap {
+            Ok(beatmap) => beatmap,
+            Err(e) => panic!("|| failed to parse beatmap: {}", e),
+        };
+    }
+
+    #[test]
+    fn open_broken_beatmap() {
+        let filename = String::from("test_files/broken.osu");
+        let beatmap = crate::import(filename);
+
+        let _beatmap = match beatmap {
+            Ok(beatmap) => beatmap,
+            Err(e) => panic!("|| failed to parse beatmap: {}", e),
+        };
+    }
 }

@@ -8,7 +8,6 @@ use std::collections::HashMap;
 
 use crate::osu::settings;
 use settings::{Difficulty, Editor, General, Metadata, Events};
-use crate::osu::defaults;
 use settings::Settings;
 
 use crate::osu::note::NoteData;
@@ -43,7 +42,7 @@ pub fn get_settings(sections: &HashMap<String, Vec<String>>) -> Settings {
 
     let colors = match sections.contains_key("[Colours]") {
         true => misc::get_colors(&sections["[Colours]"]),
-        false => defaults::get_colors(),
+        false => vec![],
     };
 
     Settings {
@@ -57,9 +56,19 @@ pub fn get_settings(sections: &HashMap<String, Vec<String>>) -> Settings {
 }
 
 pub fn get_timing_points(sections: &HashMap<String, Vec<String>>) -> Vec<TimePoint> {
-    return timing_data::get_timing_points(&sections["[TimingPoints]"]);
+    let time_points = match sections.contains_key("[TimingPoints]") {
+        true => timing_data::get_timing_points(&sections["[TimingPoints]"]),
+        false => vec![],
+    };
+
+    return time_points
 }
 
 pub fn get_note_data(sections: &HashMap<String, Vec<String>>) -> NoteData {
-    return note_data::get_note_data(&sections["[HitObjects]"]);
+    let hit_objects = match sections.contains_key("[HitObjects]") {
+        true => note_data::get_note_data(&sections["[HitObjects]"]),
+        false => NoteData::default()
+    };
+
+    return hit_objects
 }
