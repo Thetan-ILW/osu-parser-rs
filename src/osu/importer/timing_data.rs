@@ -1,6 +1,5 @@
 use crate::osu::SampleSet;
 use crate::osu::timing::TimePoint;
-use crate::osu::importer::helpers;
 
 pub fn get_timing_points(section: &Vec<String>) -> Vec<TimePoint> {
     let mut timing_points: Vec<TimePoint> = vec!();

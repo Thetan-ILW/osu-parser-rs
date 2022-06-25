@@ -1,13 +1,13 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use crate::osu::{Mode, SampleSet, OverlayPosition};
 use crate::osu::settings::{General, Editor, Metadata, Difficulty};
 use crate::osu::importer::helpers;
 
 pub fn get_general(section: &Vec<String>) -> General {
-    let mut section_data: HashMap<String, String> = HashMap::new();
+    let mut section_data: BTreeMap<String, String> = BTreeMap::new();
     helpers::get_key_value(section, &mut section_data);
 
-    let mut bool_data: HashMap<&str, bool> = HashMap::from([
+    let mut bool_data: BTreeMap<&str, bool> = BTreeMap::from([
         ("LetterboxInBreaks",       false), // Key name , Value || Default value
         ("UseSkinSprites",          false),
         ("EpilepsyWarning",         false),
@@ -16,13 +16,13 @@ pub fn get_general(section: &Vec<String>) -> General {
         ("SamplesMatchPlaybackRate",false)
     ]);
     
-    let mut u32_data: HashMap<&str, u32> = HashMap::from([
+    let mut u32_data: BTreeMap<&str, u32> = BTreeMap::from([
         ("Countdown",       0),
         ("Mode",            0),
         ("CountdownOffset", 0)
     ]);
 
-    let mut f64_data: HashMap<&str, f64> = HashMap::from([
+    let mut f64_data: BTreeMap<&str, f64> = BTreeMap::from([
         ("AudioLeadIn",     0.0),
         ("PreviewTime",     -1.0),
         ("StackLeniency",   0.7)
@@ -78,10 +78,10 @@ pub fn get_general(section: &Vec<String>) -> General {
 }
 
 pub fn get_editor(section: &Vec<String>) -> Editor {
-    let mut section_data: HashMap<String, String> = HashMap::new();
+    let mut section_data: BTreeMap<String, String> = BTreeMap::new();
     helpers::get_key_value(section, &mut section_data);
 
-    let mut f32_data: HashMap<&str, f32> = HashMap::from([
+    let mut f32_data: BTreeMap<&str, f32> = BTreeMap::from([
         ("DistanceSpacing", 1.0),
         ("BeatDivisor",     16.0),
         ("GridSize",        32.0),
@@ -116,10 +116,10 @@ pub fn get_editor(section: &Vec<String>) -> Editor {
 }
 
 pub fn get_metadata(section: &Vec<String>) -> Metadata {
-    let mut section_data: HashMap<String, String> = HashMap::new();
+    let mut section_data: BTreeMap<String, String> = BTreeMap::new();
     helpers::get_key_value(section, &mut section_data);
 
-    let mut i32_data: HashMap<&str, i32> = HashMap::from([
+    let mut i32_data: BTreeMap<&str, i32> = BTreeMap::from([
         ("BeatmapID", 0),
         ("BeatmapSetID", 0)
     ]);
@@ -158,10 +158,10 @@ pub fn get_metadata(section: &Vec<String>) -> Metadata {
 }
 
 pub fn get_difficulty(section: &Vec<String>) -> Difficulty {
-    let mut section_data: HashMap<String, String> = HashMap::new();
+    let mut section_data: BTreeMap<String, String> = BTreeMap::new();
     helpers::get_key_value(section, &mut section_data);
 
-    let mut f32_data: HashMap<&str, f32> = HashMap::from([
+    let mut f32_data: BTreeMap<&str, f32> = BTreeMap::from([
         ("HPDrainRate", 5.0),
         ("CircleSize", 5.0),
         ("OverallDifficulty", 5.0),

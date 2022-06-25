@@ -96,5 +96,10 @@ mod tests {
         assert_eq!(color.0, 69);
         assert_eq!(color.1, 228);
         assert_eq!(color.2, 13);
+
+        let slider = &beatmap.note_data.sliders[0];
+        assert_eq!(slider.x, 47.0);
+        assert_eq!(slider.y, 353.0);
+        assert_eq!(slider.time, 595.0);
     }
 }
