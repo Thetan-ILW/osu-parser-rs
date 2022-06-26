@@ -17,14 +17,6 @@ impl HitSound {
     }
 }
 
-#[derive(Default)]
-pub struct NoteData {
-    pub circles: Vec<HitObject<Circle>>,
-    pub sliders: Vec<HitObject<Slider>>,
-    pub spinners: Vec<HitObject<Spinner>>,
-    pub holds: Vec<HitObject<Hold>>,
-}
-
 pub struct HitObject<T> {
     pub x: f32,
     pub y: f32,

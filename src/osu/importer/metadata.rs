@@ -1,5 +1,5 @@
 use crate::osu::importer::key_value;
-use crate::osu::settings::{Difficulty, Editor, General, Metadata};
+use crate::osu::sections::{Difficulty, Editor, General, Metadata};
 use crate::osu::{Mode, OverlayPosition, SampleSet, Import};
 use std::collections::BTreeMap;
 

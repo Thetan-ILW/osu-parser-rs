@@ -1,7 +1,8 @@
 use crate::osu::Import;
-use crate::osu::note::{Circle, HitObject, HitSound, Hold, NoteData, Slider, Spinner};
+use crate::osu::sections::HitObjects;
+use crate::osu::note::{Circle, HitObject, HitSound, Hold, Slider, Spinner};
 
-impl Import for NoteData {
+impl Import for HitObjects {
     fn parse(section: &Vec<String>) -> Self {
         let mut circles: Vec<HitObject<Circle>> = vec![];
         let mut sliders: Vec<HitObject<Slider>> = vec![];
@@ -41,7 +42,7 @@ impl Import for NoteData {
             };
         }
     
-        NoteData {
+        HitObjects {
             circles,
             sliders,
             spinners,

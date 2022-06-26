@@ -1,8 +1,10 @@
 pub mod exporter;
 pub mod importer;
 pub mod note;
-pub mod settings;
+pub mod sections;
 pub mod timing;
+
+use crate::osu::sections::{Settings, TimingPoints, HitObjects};
 
 pub enum Mode {
     Osu,
@@ -72,12 +74,15 @@ impl OverlayPosition {
     }
 }
 
+#[derive(Clone)]
+pub struct Color(pub u8, pub u8, pub u8);
+
 pub struct Beatmap {
-    pub settings: settings::Settings,
-    pub timing_data: Vec<timing::TimePoint>,
-    pub note_data: note::NoteData,
+    pub settings: Settings,
+    pub timing_points: TimingPoints,
+    pub hit_objects: HitObjects,
 }
 
-pub trait Import {
+pub trait Import { // move to importer.rs pls
     fn parse(strings: &Vec<String>) -> Self; // rename this
 }

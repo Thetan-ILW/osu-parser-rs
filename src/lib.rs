@@ -12,13 +12,13 @@ pub fn import(filename: String) -> Result<Beatmap, Error> {
     let data = get_sections(reader)?;
 
     let settings = importer::get_settings(&data);
-    let timing_data = importer::get_timing_points(&data);
-    let note_data = importer::get_note_data(&data);
+    let timing_points = importer::get_timing_points(&data);
+    let hit_objects = importer::get_hit_objects(&data);
 
     return Ok(Beatmap {
         settings,
-        timing_data,
-        note_data,
+        timing_points,
+        hit_objects,
     });
 }
 
@@ -81,6 +81,7 @@ mod tests {
         assert_eq!(beatmap.settings.difficulty.approach_rate, 6.9 as f32);
         assert_eq!(beatmap.settings.general.letter_box_in_breaks, false);
         assert_eq!(beatmap.settings.general.samples_match_playback_rate, true);
+        assert_eq!(beatmap.timing_points.data[0].time, 999.0)
     }
     #[test]
     fn color_test() {
@@ -92,13 +93,13 @@ mod tests {
             Err(e) => panic!("|| failed to parse beatmap: {}", e),
         };
 
-        let color = beatmap.settings.colors[0].clone();
+        let color = beatmap.settings.colors.data[0].clone();
 
         assert_eq!(color.0, 69);
         assert_eq!(color.1, 228);
         assert_eq!(color.2, 13);
 
-        let slider = &beatmap.note_data.sliders[0];
+        let slider = &beatmap.hit_objects.sliders[0];
         assert_eq!(slider.x, 47.0);
         assert_eq!(slider.y, 353.0);
         assert_eq!(slider.time, 595.0);

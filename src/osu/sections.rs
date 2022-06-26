@@ -1,12 +1,17 @@
-use crate::osu::{Mode, OverlayPosition, SampleSet};
+// This is a module that stores section structures. 
+// Logic to these structures is implemented in other modules
 
-pub struct Settings {
+use crate::osu::{Mode, OverlayPosition, SampleSet, Color};
+use crate::osu::timing::TimePoint;
+use crate::osu::note::{HitObject, Circle, Slider, Spinner, Hold};
+
+pub struct Settings { // I CANT FIND THE RIGHT NAME
     pub general: General,
     pub editor: Editor,
     pub metadata: Metadata,
     pub difficulty: Difficulty,
     pub events: Events,
-    pub colors: Vec<Color>,
+    pub colors: Colors,
 }
 
 pub struct General {
@@ -99,5 +104,20 @@ impl Default for Difficulty {
 #[derive(Default)]
 pub struct Events {}
 
-#[derive(Clone)]
-pub struct Color(pub u8, pub u8, pub u8);
+#[derive(Default)]
+pub struct TimingPoints {
+    pub data: Vec<TimePoint>
+}
+
+#[derive(Default)]
+pub struct Colors {
+    pub data: Vec<Color>
+}
+
+#[derive(Default)]
+pub struct HitObjects {
+    pub circles: Vec<HitObject<Circle>>,
+    pub sliders: Vec<HitObject<Slider>>,
+    pub spinners: Vec<HitObject<Spinner>>,
+    pub holds: Vec<HitObject<Hold>>,
+}
