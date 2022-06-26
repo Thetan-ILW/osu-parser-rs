@@ -4,14 +4,14 @@ mod misc;
 mod note_data;
 mod timing_data;
 
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
-use crate::osu::sections::Settings;
+use crate::osu::Settings;
 
 use crate::osu::Import;
 use crate::osu::sections::{TimingPoints, HitObjects};
 
-pub fn get_settings(sections: &HashMap<String, Vec<String>>) -> Settings {
+pub fn get_settings(sections: &BTreeMap<String, Vec<String>>) -> Settings {
     let general =       get_section(sections, "[General]");
     let editor =        get_section(sections, "[Editor]");
     let metadata =      get_section(sections, "[Metadata]");
@@ -29,15 +29,15 @@ pub fn get_settings(sections: &HashMap<String, Vec<String>>) -> Settings {
     }
 }
 
-pub fn get_timing_points(sections: &HashMap<String, Vec<String>>) -> TimingPoints {
+pub fn get_timing_points(sections: &BTreeMap<String, Vec<String>>) -> TimingPoints {
     return get_section(sections, "[TimingPoints]")
 }
 
-pub fn get_hit_objects(sections: &HashMap<String, Vec<String>>) -> HitObjects {
+pub fn get_hit_objects(sections: &BTreeMap<String, Vec<String>>) -> HitObjects {
     return get_section(sections, "[HitObjects]")
 }
 
-pub fn get_section<T: Import + Default>(sections: &HashMap<String, Vec<String>>, name: &str) -> T
+pub fn get_section<T: Import + Default>(sections: &BTreeMap<String, Vec<String>>, name: &str) -> T
 {
     return match sections.contains_key(name) { 
         true => T::parse(&sections[name]),

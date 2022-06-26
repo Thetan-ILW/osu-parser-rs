@@ -1,11 +1,12 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::fs::File;
 use std::io::Error;
 use std::io::{prelude::*, BufReader};
 
 mod osu;
 use osu::importer;
-use osu::Beatmap;
+use osu::{Settings, Beatmap};
+use osu::sections::{TimingPoints, HitObjects};
 
 pub fn import(filename: String) -> Result<Beatmap, Error> {
     let reader = open_file(&filename)?;
@@ -19,11 +20,30 @@ pub fn import(filename: String) -> Result<Beatmap, Error> {
         settings,
         timing_points,
         hit_objects,
-    });
+    })
 }
 
-fn get_sections(reader: BufReader<File>) -> Result<HashMap<String, Vec<String>>, Error> {
-    let mut data: HashMap<String, Vec<String>> = HashMap::new();
+// It looks terrible
+pub fn import_settings(filename: String) -> Result<Settings, Error> {
+    let reader = open_file(&filename)?;
+    let data = get_sections(reader)?;
+    return Ok(importer::get_settings(&data));
+}
+
+pub fn import_timing_points(filename: String) -> Result<TimingPoints, Error> {
+    let reader = open_file(&filename)?;
+    let data = get_sections(reader)?;
+    return Ok(importer::get_timing_points(&data))
+}
+
+pub fn import_hit_objects(filename: String) -> Result<HitObjects, Error> {
+    let reader = open_file(&filename)?;
+    let data = get_sections(reader)?;
+    return Ok(importer::get_hit_objects(&data))
+}
+
+fn get_sections(reader: BufReader<File>) -> Result<BTreeMap<String, Vec<String>>, Error> {
+    let mut data: BTreeMap<String, Vec<String>> = BTreeMap::new();
     let mut current_section: String = String::new();
 
     for line in reader.lines() {
@@ -84,6 +104,21 @@ mod tests {
         assert_eq!(beatmap.timing_points.data[0].time, 999.0)
     }
     #[test]
+    fn import_only_hit_objects() {
+        let filename = String::from("test_files/beatmap.osu");
+        let hit_objects = crate::import_hit_objects(filename);
+
+        let hit_objects = match hit_objects {
+            Ok(hit_objects) => hit_objects,
+            Err(e) => panic!("|| failed to parse beatmap: {}", e),
+        };
+
+        let circle = &hit_objects.circles[0];
+        assert_eq!(circle.x, 81.02127);
+        assert_eq!(circle.y, 72.85107);
+        assert_eq!(circle.time, 0.0);
+    }
+    #[test]
     fn color_test() {
         let filename = String::from("test_files/ignore/colortest.osu");
         let beatmap = crate::import(filename);
@@ -115,8 +150,8 @@ mod tests {
         };
     }
 
-    #[test]
-    fn open_broken_beatmap() {
+    //#[test]
+    fn _open_broken_beatmap() {
         let filename = String::from("test_files/broken.osu");
         let beatmap = crate::import(filename);
 

@@ -5,15 +5,6 @@ use crate::osu::{Mode, OverlayPosition, SampleSet, Color};
 use crate::osu::timing::TimePoint;
 use crate::osu::note::{HitObject, Circle, Slider, Spinner, Hold};
 
-pub struct Settings { // I CANT FIND THE RIGHT NAME
-    pub general: General,
-    pub editor: Editor,
-    pub metadata: Metadata,
-    pub difficulty: Difficulty,
-    pub events: Events,
-    pub colors: Colors,
-}
-
 pub struct General {
     pub audio_filename: String,
     pub audio_lead_in: f64,

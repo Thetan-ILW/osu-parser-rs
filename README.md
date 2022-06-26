@@ -2,15 +2,13 @@
 practice project, don’t expect much
 
 ### Done:
-- Import
+- Importing a file, timing points or hit objects
 - General, editor, metadata, difficulty, timing points, colors and hit objects parsing
 
 ### Todo:
 - Parsing events
 - Refactor notedata.rs (never)
 - Exporting
-- Use BTreeMap instead of HashMap
-- Functions for getting only metadata or only notes
 - Multithreading (we need more speed!)
 ____
 ## Usage:

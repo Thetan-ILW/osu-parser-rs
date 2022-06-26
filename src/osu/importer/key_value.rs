@@ -39,7 +39,7 @@ pub fn parse_and_set_bool(
     }
 }
 
-// Get the value from hashmap, if there is no or an error then return default value
+// Get the value from BTreeMap, if there is no or an error then return default value
 // use only for strings
 pub fn get_safely(data: &BTreeMap<String, String>, name: &str) -> String {
     match data.contains_key(name) {
@@ -48,7 +48,7 @@ pub fn get_safely(data: &BTreeMap<String, String>, name: &str) -> String {
     }
 }
 
-// Split [KEY:VALUE] and insert it to hashmap
+// Split [KEY:VALUE] and insert it to BTreeMap
 pub fn get_key_value(section: &Vec<String>, data: &mut BTreeMap<String, String>) {
     for line in section {
         let key_value = line.split(":");
