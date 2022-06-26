@@ -1,17 +1,16 @@
 mod key_value;
-mod metadata; // rename this
+mod info;
 mod misc;
-mod note_data;
-mod timing_data;
+mod hit_objects;
+mod timing_points;
 
 use std::collections::BTreeMap;
 
-use crate::osu::Settings;
+use crate::osu;
+use osu::Info;
+use osu::sections::{TimingPoints, HitObjects};
 
-use crate::osu::Import;
-use crate::osu::sections::{TimingPoints, HitObjects};
-
-pub fn get_settings(sections: &BTreeMap<String, Vec<String>>) -> Settings {
+pub fn get_info(sections: &BTreeMap<String, Vec<String>>) -> Info {
     let general =       get_section(sections, "[General]");
     let editor =        get_section(sections, "[Editor]");
     let metadata =      get_section(sections, "[Metadata]");
@@ -19,7 +18,7 @@ pub fn get_settings(sections: &BTreeMap<String, Vec<String>>) -> Settings {
     let events =        get_section(sections, "[Events]");
     let colors =        get_section(sections, "[Colours]");
 
-    Settings {
+    Info {
         general,
         editor,
         metadata,
@@ -43,4 +42,8 @@ pub fn get_section<T: Import + Default>(sections: &BTreeMap<String, Vec<String>>
         true => T::parse(&sections[name]),
         false => T::default(),
     }
+}
+
+pub trait Import {
+    fn parse(strings: &Vec<String>) -> Self; // rename this
 }

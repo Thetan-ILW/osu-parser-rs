@@ -81,7 +81,7 @@ impl OverlayPosition {
 #[derive(Clone)]
 pub struct Color(pub u8, pub u8, pub u8);
 
-pub struct Settings { // I CANT FIND THE RIGHT NAME
+pub struct Info { // I CANT FIND THE RIGHT NAME
     pub general: General,
     pub editor: Editor,
     pub metadata: Metadata,
@@ -91,11 +91,7 @@ pub struct Settings { // I CANT FIND THE RIGHT NAME
 }
 
 pub struct Beatmap {
-    pub settings: Settings,
+    pub info: Info,
     pub timing_points: TimingPoints,
     pub hit_objects: HitObjects,
-}
-
-pub trait Import { // move to importer.rs pls
-    fn parse(strings: &Vec<String>) -> Self; // rename this
 }

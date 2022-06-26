@@ -1,6 +1,8 @@
-use crate::osu::sections::TimingPoints;
-use crate::osu::timing::TimePoint;
-use crate::osu::{SampleSet, Import};
+use crate::osu;
+use osu::sections::TimingPoints;
+use osu::timing::TimePoint;
+use osu::SampleSet;
+use osu::importer::Import;
 
 impl Import for TimingPoints {
     fn parse(section: &Vec<String>) -> Self {

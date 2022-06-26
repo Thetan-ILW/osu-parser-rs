@@ -1,6 +1,7 @@
-use crate::osu::Import;
-use crate::osu::sections::HitObjects;
-use crate::osu::note::{Circle, HitObject, HitSound, Hold, Slider, Spinner};
+use crate::osu;
+use osu::importer::Import;
+use osu::sections::HitObjects;
+use osu::note::{Circle, HitObject, HitSound, Hold, Slider, Spinner};
 
 impl Import for HitObjects {
     fn parse(section: &Vec<String>) -> Self {

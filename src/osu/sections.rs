@@ -1,9 +1,9 @@
 // This is a module that stores section structures. 
 // Logic to these structures is implemented in other modules
-
-use crate::osu::{Mode, OverlayPosition, SampleSet, Color};
-use crate::osu::timing::TimePoint;
-use crate::osu::note::{HitObject, Circle, Slider, Spinner, Hold};
+use crate::osu;
+use osu::{Mode, OverlayPosition, SampleSet, Color};
+use osu::timing::TimePoint;
+use osu::note::{HitObject, Circle, Slider, Spinner, Hold};
 
 pub struct General {
     pub audio_filename: String,

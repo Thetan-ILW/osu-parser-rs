@@ -1,7 +1,10 @@
-use crate::osu::importer::key_value;
-use crate::osu::sections::{Difficulty, Editor, General, Metadata};
-use crate::osu::{Mode, OverlayPosition, SampleSet, Import};
 use std::collections::BTreeMap;
+
+use crate::osu;
+use osu::importer::key_value;
+use osu::importer::Import;
+use osu::sections::{Difficulty, Editor, General, Metadata};
+use osu::{Mode, OverlayPosition, SampleSet};
 
 impl Import for General {
     fn parse(strings: &Vec<String>) -> Self{
@@ -99,7 +102,10 @@ impl Import for Metadata {
         let mut section_data: BTreeMap<String, String> = BTreeMap::new();
         key_value::get_key_value(section, &mut section_data);
     
-        let mut i32_data: BTreeMap<&str, i32> = BTreeMap::from([("BeatmapID", 0), ("BeatmapSetID", 0)]);
+        let mut i32_data: BTreeMap<&str, i32> = BTreeMap::from([
+            ("BeatmapID", 0), 
+            ("BeatmapSetID", 0)
+        ]);
     
         key_value::parse_and_set(&mut i32_data, &section_data);
     

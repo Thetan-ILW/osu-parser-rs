@@ -1,7 +1,10 @@
-use crate::osu::{Import, Color};
-use crate::osu::importer::key_value;
-use crate::osu::sections::{Colors, Events};
 use std::collections::BTreeMap;
+
+use crate::osu;
+use osu::Color;
+use osu::importer::Import;
+use osu::importer::key_value;
+use osu::sections::{Colors, Events};
 
 impl Import for Events {
     fn parse(_section: &Vec<String>) -> Self {

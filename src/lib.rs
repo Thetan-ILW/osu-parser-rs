@@ -5,29 +5,29 @@ use std::io::{prelude::*, BufReader};
 
 mod osu;
 use osu::importer;
-use osu::{Settings, Beatmap};
+use osu::{Info, Beatmap};
 use osu::sections::{TimingPoints, HitObjects};
 
 pub fn import(filename: String) -> Result<Beatmap, Error> {
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
 
-    let settings = importer::get_settings(&data);
+    let info = importer::get_info(&data);
     let timing_points = importer::get_timing_points(&data);
     let hit_objects = importer::get_hit_objects(&data);
 
     return Ok(Beatmap {
-        settings,
+        info,
         timing_points,
         hit_objects,
     })
 }
 
 // It looks terrible
-pub fn import_settings(filename: String) -> Result<Settings, Error> {
+pub fn import_info(filename: String) -> Result<Info, Error> {
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
-    return Ok(importer::get_settings(&data));
+    return Ok(importer::get_info(&data));
 }
 
 pub fn import_timing_points(filename: String) -> Result<TimingPoints, Error> {
@@ -97,10 +97,10 @@ mod tests {
             Err(e) => panic!("|| failed to parse beatmap: {}", e),
         };
 
-        assert_eq!(beatmap.settings.general.preview_time, -69.0);
-        assert_eq!(beatmap.settings.difficulty.approach_rate, 6.9 as f32);
-        assert_eq!(beatmap.settings.general.letter_box_in_breaks, false);
-        assert_eq!(beatmap.settings.general.samples_match_playback_rate, true);
+        assert_eq!(beatmap.info.general.preview_time, -69.0);
+        assert_eq!(beatmap.info.difficulty.approach_rate, 6.9 as f32);
+        assert_eq!(beatmap.info.general.letter_box_in_breaks, false);
+        assert_eq!(beatmap.info.general.samples_match_playback_rate, true);
         assert_eq!(beatmap.timing_points.data[0].time, 999.0)
     }
     #[test]
@@ -120,7 +120,7 @@ mod tests {
     }
     #[test]
     fn color_test() {
-        let filename = String::from("test_files/ignore/colortest.osu");
+        let filename = String::from("test_files/colortest.osu");
         let beatmap = crate::import(filename);
 
         let beatmap = match beatmap {
@@ -128,16 +128,11 @@ mod tests {
             Err(e) => panic!("|| failed to parse beatmap: {}", e),
         };
 
-        let color = beatmap.settings.colors.data[0].clone();
+        let color = beatmap.info.colors.data[0].clone();
 
         assert_eq!(color.0, 69);
         assert_eq!(color.1, 228);
         assert_eq!(color.2, 13);
-
-        let slider = &beatmap.hit_objects.sliders[0];
-        assert_eq!(slider.x, 47.0);
-        assert_eq!(slider.y, 353.0);
-        assert_eq!(slider.time, 595.0);
     }
     #[test]
     fn open_blank_beatmap() {
@@ -150,7 +145,7 @@ mod tests {
         };
     }
 
-    //#[test]
+    #[test]
     fn _open_broken_beatmap() {
         let filename = String::from("test_files/broken.osu");
         let beatmap = crate::import(filename);
