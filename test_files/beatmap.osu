@@ -2,7 +2,7 @@
 
 [General]
 AudioLeadIn: 0
-PreviewTime: -1
+PreviewTime: -69
 Countdown: 1
 SampleSet: Normal
 StackLeniency: 0.7

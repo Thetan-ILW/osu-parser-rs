@@ -1,49 +1,52 @@
+use crate::osu::Import;
 use crate::osu::note::{Circle, HitObject, HitSound, Hold, NoteData, Slider, Spinner};
 
-pub fn get_note_data(section: &Vec<String>) -> NoteData {
-    let mut circles: Vec<HitObject<Circle>> = vec![];
-    let mut sliders: Vec<HitObject<Slider>> = vec![];
-    let mut spinners: Vec<HitObject<Spinner>> = vec![];
-    let mut holds: Vec<HitObject<Hold>> = vec![];
-
-    for line in section {
-        let split = line.split(",");
-        let split = split.collect::<Vec<&str>>();
-
-        let note_type: u8 = split[3].parse().unwrap_or(0);
-
-        match note_type {
-            0b1 | 0b101 => {
-                // Circle | New combo circle | ShortNote
-                let circle = Circle::from_split(split);
-                circles.push(circle);
-            }
-            0b1000 | 0b1100 => {
-                // Spinner | New combo spinner
-                let spinner = Spinner::from_split(split);
-                spinners.push(spinner);
-            }
-            0b10 | 0b110 | 0b10110 => {
-                // slider
-                let slider = Slider::from_split(split);
-                sliders.push(slider);
-            }
-            0b10000000 => {
-                // Hold
-                let hold = Hold::from_split(split);
-                holds.push(hold);
-            }
-            _ => {
-                println!("UNKNOWN OBJECT {note_type}");
-            }
-        };
-    }
-
-    NoteData {
-        circles,
-        sliders,
-        spinners,
-        holds,
+impl Import for NoteData {
+    fn parse(section: &Vec<String>) -> Self {
+        let mut circles: Vec<HitObject<Circle>> = vec![];
+        let mut sliders: Vec<HitObject<Slider>> = vec![];
+        let mut spinners: Vec<HitObject<Spinner>> = vec![];
+        let mut holds: Vec<HitObject<Hold>> = vec![];
+    
+        for line in section {
+            let split = line.split(",");
+            let split = split.collect::<Vec<&str>>();
+    
+            let note_type: u8 = split[3].parse().unwrap_or(0);
+    
+            match note_type {
+                0b1 | 0b101 => {
+                    // Circle | New combo circle | ShortNote
+                    let circle = Circle::from_split(split);
+                    circles.push(circle);
+                }
+                0b1000 | 0b1100 => {
+                    // Spinner | New combo spinner
+                    let spinner = Spinner::from_split(split);
+                    spinners.push(spinner);
+                }
+                0b10 | 0b110 | 0b10110 => {
+                    // slider
+                    let slider = Slider::from_split(split);
+                    sliders.push(slider);
+                }
+                0b10000000 => {
+                    // Hold
+                    let hold = Hold::from_split(split);
+                    holds.push(hold);
+                }
+                _ => {
+                    println!("UNKNOWN OBJECT {note_type}");
+                }
+            };
+        }
+    
+        NoteData {
+            circles,
+            sliders,
+            spinners,
+            holds,
+        }
     }
 }
 

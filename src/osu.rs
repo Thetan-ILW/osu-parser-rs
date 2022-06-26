@@ -77,3 +77,7 @@ pub struct Beatmap {
     pub timing_data: Vec<timing::TimePoint>,
     pub note_data: note::NoteData,
 }
+
+pub trait Import {
+    fn parse(strings: &Vec<String>) -> Self; // rename this
+}

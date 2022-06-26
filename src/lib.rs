@@ -77,6 +77,7 @@ mod tests {
             Err(e) => panic!("|| failed to parse beatmap: {}", e),
         };
 
+        assert_eq!(beatmap.settings.general.preview_time, -69.0);
         assert_eq!(beatmap.settings.difficulty.approach_rate, 6.9 as f32);
         assert_eq!(beatmap.settings.general.letter_box_in_breaks, false);
         assert_eq!(beatmap.settings.general.samples_match_playback_rate, true);

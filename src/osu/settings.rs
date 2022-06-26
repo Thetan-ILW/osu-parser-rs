@@ -28,8 +28,8 @@ pub struct General {
     pub samples_match_playback_rate: bool,
 }
 
-impl General {
-    pub fn default() -> Self{
+impl Default for General {
+    fn default() -> Self{
         General {
             audio_filename: String::new(),
             audio_lead_in: 0.0,
@@ -74,7 +74,6 @@ pub struct Metadata {
     pub beatmap_set_id: i32,
 }
 
-#[derive(Default)]
 pub struct Difficulty {
     pub hp_drain_rate: f32,
     pub circle_size: f32,
@@ -82,6 +81,19 @@ pub struct Difficulty {
     pub approach_rate: f32,
     pub slider_multiplier: f32,
     pub slider_tick_rate: f32,
+}
+
+impl Default for Difficulty {
+    fn default() -> Self {
+        Difficulty {
+            hp_drain_rate: 5.0,
+            circle_size: 5.0,
+            overall_difficulty: 5.0,
+            approach_rate: 5.0,
+            slider_multiplier: 1.0,
+            slider_tick_rate: 1.0,
+        }
+    }
 }
 
 #[derive(Default)]

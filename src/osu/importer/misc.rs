@@ -1,9 +1,12 @@
+use crate::osu::Import;
 use crate::osu::importer::key_value;
 use crate::osu::settings::{Color, Events};
 use std::collections::BTreeMap;
 
-pub fn get_events(_section: &Vec<String>) -> Events {
-    Events {}
+impl Import for Events {
+    fn parse(_section: &Vec<String>) -> Self {
+        Events {}
+    }
 }
 
 pub fn get_colors(section: &Vec<String>) -> Vec<Color> {
