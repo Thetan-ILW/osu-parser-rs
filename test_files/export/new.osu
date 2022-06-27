@@ -1,0 +1,25 @@
+osu file format v128
+
+[Editor]
+DistanceSpacing: 1
+BeatDivisor: 16
+GridSize: 32
+TimelineZoom: 1
+
+[Metadata]
+Title: 2444
+TitleUnicode: 2444
+Artist: 111
+ArtistUnicode: 111
+Creator: Righeil
+BeatmapId: 0
+BeatmapSetId: 0
+
+[Difficulty]
+HPDrainRate: 5
+CircleSize: 5
+OverallDifficulty: 5
+ApproachRate: 6.9
+SliderMultiplier: 1
+SliderTickRate: 1
+

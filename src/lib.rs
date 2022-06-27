@@ -1,10 +1,11 @@
 use std::collections::BTreeMap;
 use std::fs::File;
 use std::io::Error;
-use std::io::{prelude::*, BufReader};
+use std::io::{prelude::*, BufReader, LineWriter};
 
 mod osu;
 use osu::importer;
+use osu::exporter;
 use osu::{Info, Beatmap};
 use osu::sections::{TimingPoints, HitObjects};
 
@@ -40,6 +41,14 @@ pub fn import_hit_objects(filename: String) -> Result<HitObjects, Error> {
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
     return Ok(importer::get_hit_objects(&data))
+}
+
+pub fn export(path: &str, beatmap: Beatmap) -> Result<(), Error> {
+    let file = File::create(path)?;
+    let mut writer = LineWriter::new(file);
+    exporter::write_to_osu(&mut writer, beatmap);
+    writer.flush()?;
+    return Ok(())
 }
 
 fn get_sections(reader: BufReader<File>) -> Result<BTreeMap<String, Vec<String>>, Error> {
@@ -146,13 +155,19 @@ mod tests {
     }
 
     #[test]
-    fn _open_broken_beatmap() {
-        let filename = String::from("test_files/broken.osu");
+    fn import_and_export() {
+        let filename = String::from("test_files/beatmap.osu");
         let beatmap = crate::import(filename);
 
-        let _beatmap = match beatmap {
+        let beatmap = match beatmap {
             Ok(beatmap) => beatmap,
             Err(e) => panic!("|| failed to parse beatmap: {}", e),
         };
+
+        let result = crate::export("test_files/export/new.osu", beatmap);
+        match result {
+            Ok(_) => println!("success"),
+            Err(e) => panic!("uhhh ummm {e}")
+        }
     }
 }

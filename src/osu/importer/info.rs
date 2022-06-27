@@ -121,7 +121,10 @@ impl Import for Metadata {
     
         let tags = key_value::get_safely(&section_data, "Tags");
         let tags: Vec<&str> = tags.split(" ").collect();
-        m.tags = tags.iter().map(|&s| s.into()).collect();
+
+        if tags[0].len() != 0 { 
+            m.tags = tags.iter().map(|&s| s.into()).collect();
+        } // if there are no tags, then there is no point in writing
     
         m.beatmap_id = i32_data["BeatmapID"];
         m.beatmap_set_id = i32_data["BeatmapSetID"];
