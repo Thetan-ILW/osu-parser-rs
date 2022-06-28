@@ -1,7 +1,52 @@
 use crate::osu;
-use osu::sections::{Editor, Metadata, Difficulty};
+use osu::sections::{General, Editor, Metadata, Difficulty};
 
 use std::fmt::Write;
+
+pub fn get_general(g: &General) -> String {
+    let mut lines = String::new();
+    if let Err(e) = writeln!(&mut lines, "[General]") {
+        println!("{e}");
+        return lines
+    }
+
+    if g.audio_filename.len() != 0 {
+        writeln!(&mut lines, "AudioFilename: {}", g.audio_filename).unwrap();
+    }
+    
+    writeln!(&mut lines, "AudioLeadIn: {}", g.audio_lead_in).unwrap();
+    writeln!(&mut lines, "PreviewTime: {}", g.preview_time).unwrap();
+    writeln!(&mut lines, "Countdown: {}", g.countdown).unwrap();
+    writeln!(&mut lines, "SampleSet: {}", g.sample_set).unwrap();
+    writeln!(&mut lines, "StackLeniency: {}", g.stack_leniency).unwrap();
+    writeln!(&mut lines, "Mode: {}", g.mode).unwrap();
+    writeln!(&mut lines, "LetterboxInBreaks: {}", g.letter_box_in_breaks as u8).unwrap();
+    
+    if g.use_skin_sprites == true {
+        writeln!(&mut lines, "UseSkinSprites: {}", 1).unwrap();
+    }
+
+    if g.skin_preference.len() != 0 {
+        writeln!(&mut lines, "SkinPreference: {}", g.skin_preference).unwrap();
+    }
+
+    if g.epilepsy_warning == true {
+        writeln!(&mut lines, "EpilepsyWarning: {}", 1).unwrap();
+    }
+
+    if g.countdown_offset != 0 {
+        writeln!(&mut lines, "CountdownOffset: {}", g.countdown_offset).unwrap();
+    }
+
+    if g.special_style == true {
+        writeln!(&mut lines, "SpecialStyle: {}", 1).unwrap();
+    }
+
+    writeln!(&mut lines, "WidescreenStoryboard: {}", g.widescreen_storyboard as u8).unwrap();
+    writeln!(&mut lines, "SamplesMatchPlaybackRate: {}", g.samples_match_playback_rate as u8).unwrap();
+
+    return lines;
+}
 
 pub fn get_editor(e: &Editor) -> String {
     let mut lines = String::new();
@@ -43,6 +88,7 @@ pub fn get_metadata(m: &Metadata) -> String {
     writeln!(&mut lines, "Artist: {}", m.artist).unwrap();
     writeln!(&mut lines, "ArtistUnicode: {}", m.artist_unicode).unwrap();
     writeln!(&mut lines, "Creator: {}", m.creator).unwrap();
+    writeln!(&mut lines, "Version: {}", m.version).unwrap();
     
     if m.source.len() != 0 {
         writeln!(&mut lines, "Source: {}", m.source).unwrap();

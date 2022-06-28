@@ -26,7 +26,7 @@ impl Import for Colors {
         for (_, value) in section_data {
             let split: Vec<&str> = value.split(",").collect();
             if split.len() != 3 {
-                println!("Error: invalid color value");
+                println!("😡 Error: invalid color value");
                 continue;
             }
     

@@ -1,5 +1,16 @@
 osu file format v128
 
+[General]
+AudioLeadIn: 0
+PreviewTime: -69
+Countdown: 1
+SampleSet: Normal
+StackLeniency: 0.7
+Mode: 0
+LetterboxInBreaks: 0
+WidescreenStoryboard: 1
+SamplesMatchPlaybackRate: 1
+
 [Editor]
 DistanceSpacing: 1
 BeatDivisor: 16
@@ -12,6 +23,7 @@ TitleUnicode: 2444
 Artist: 111
 ArtistUnicode: 111
 Creator: Righeil
+Version: New Difficulty
 BeatmapId: 0
 BeatmapSetId: 0
 
@@ -23,3 +35,8 @@ ApproachRate: 6.9
 SliderMultiplier: 1
 SliderTickRate: 1
 
+
+[TimingPoints]
+999,120,4,1,0,100,1,0
+0,-100,4,1,0,100,0,0
+1,-100,4,1,0,100,0,0

@@ -4,7 +4,6 @@ use crate::osu;
 use osu::importer::key_value;
 use osu::importer::Import;
 use osu::sections::{Difficulty, Editor, General, Metadata};
-use osu::{Mode, OverlayPosition, SampleSet};
 
 impl Import for General {
     fn parse(strings: &Vec<String>) -> Self{
@@ -39,19 +38,12 @@ impl Import for General {
         g.audio_lead_in = f64_data["AudioLeadIn"];
         g.preview_time = f64_data["PreviewTime"];
         g.countdown = u32_data["Countdown"];
-    
-        g.sample_set = SampleSet::from_string(
-            key_value::get_safely(&section_data, "SampleSet")
-        );
-    
+        g.sample_set = key_value::get_safely(&section_data, "SampleSet");
         g.stack_leniency = f64_data["StackLeniency"];
-        g.mode = Mode::new(u32_data["Mode"] as i8);
+        g.mode = u32_data["Mode"] as u8;
         g.letter_box_in_breaks = bool_data["LetterboxInBreaks"];
         g.use_skin_sprites = bool_data["UseSkinSprites"];
-    
-        g.overlay_position =
-            OverlayPosition::new(key_value::get_safely(&section_data, "OverlayPosition"));
-    
+        g.overlay_position = key_value::get_safely(&section_data, "OverlayPosition");
         g.skin_preference = key_value::get_safely(&section_data, "SkinPreference");
         g.epilepsy_warning = bool_data["EpilepsyWarning"];
         g.countdown_offset = u32_data["CountdownOffset"];

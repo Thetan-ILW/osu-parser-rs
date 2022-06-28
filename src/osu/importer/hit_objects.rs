@@ -15,32 +15,27 @@ impl Import for HitObjects {
             let split = split.collect::<Vec<&str>>();
     
             let note_type: u8 = split[3].parse().unwrap_or(0);
-    
-            match note_type {
-                0b1 | 0b101 => {
-                    // Circle | New combo circle | ShortNote
-                    let circle = Circle::from_split(split);
-                    circles.push(circle);
-                }
-                0b1000 | 0b1100 => {
-                    // Spinner | New combo spinner
-                    let spinner = Spinner::from_split(split);
-                    spinners.push(spinner);
-                }
-                0b10 | 0b110 | 0b10110 => {
-                    // slider
-                    let slider = Slider::from_split(split);
-                    sliders.push(slider);
-                }
-                0b10000000 => {
-                    // Hold
-                    let hold = Hold::from_split(split);
-                    holds.push(hold);
-                }
-                _ => {
-                    println!("UNKNOWN OBJECT {note_type}");
-                }
-            };
+            // https://github.com/nojhamster/osu-parser/blob/master/index.js
+            // stole the code from there ^^^, because i'm DUMB 🤪 to think for myself
+            if (1 & note_type) == 1 {
+                let circle = Circle::from_split(split);
+                circles.push(circle);
+            }
+            else if (2 & note_type) == 2 {
+                let slider = Slider::from_split(split);
+                sliders.push(slider);
+            }
+            else if (8 & note_type) == 8 {
+                let spinner = Spinner::from_split(split);
+                spinners.push(spinner);
+            }
+            else if (128 & note_type) == 128 {
+                let hold = Hold::from_split(split);
+                holds.push(hold);
+            }
+            else {
+                println!("😡 UNKNOWN OBJECT {note_type}");
+            }
         }
     
         HitObjects {

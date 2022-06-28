@@ -36,7 +36,7 @@ pub fn get_hit_objects(sections: &BTreeMap<String, Vec<String>>) -> HitObjects {
     return get_section(sections, "[HitObjects]")
 }
 
-pub fn get_section<T: Import + Default>(sections: &BTreeMap<String, Vec<String>>, name: &str) -> T
+fn get_section<T: Import + Default>(sections: &BTreeMap<String, Vec<String>>, name: &str) -> T
 {
     return match sections.contains_key(name) { 
         true => T::parse(&sections[name]),

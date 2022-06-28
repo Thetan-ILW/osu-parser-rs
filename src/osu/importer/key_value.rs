@@ -13,7 +13,7 @@ pub fn parse_and_set<T: std::str::FromStr>(
             Ok(new_value) => *value = new_value,
             Err(_) => {
                 if s.len() != 0 {
-                    println!("Error: failed to read {name}")
+                    println!("😡 Error: failed to read {name}")
                 }
             }
         };
@@ -32,7 +32,7 @@ pub fn parse_and_set_bool(
             _ if s == "1" => *value = true,
             _ => {
                 if s.len() != 0 {
-                    println!("Error: failed to read {name}")
+                    println!("😡 Error: failed to read {name}")
                 }
             }
         };

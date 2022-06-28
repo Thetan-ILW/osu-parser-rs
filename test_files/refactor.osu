@@ -1,0 +1,56 @@
+﻿osu file format v128
+
+[General]
+AudioLeadIn: 0
+PreviewTime: -1
+Countdown: 1
+SampleSet: Normal
+StackLeniency: 0.7
+Mode: 0
+LetterboxInBreaks: 0
+WidescreenStoryboard: 1
+SamplesMatchPlaybackRate: 1
+
+[Editor]
+DistanceSpacing: 1
+BeatDivisor: 0
+GridSize: 32
+TimelineZoom: 1
+
+[Metadata]
+Title: 
+Artist: 
+Creator: Righeil
+Version: New Difficulty
+
+[Difficulty]
+HPDrainRate: 5
+CircleSize: 5
+OverallDifficulty: 5
+ApproachRate: 5
+SliderMultiplier: 1
+SliderTickRate: 1
+
+[Events]
+
+[TimingPoints]
+0,468.75,4,1,0,100,1,0
+0,-100,4,1,0,100,0,0
+1,-100,4,1,0,100,0,0
+
+
+[HitObjects]
+34.723404,31.999992,0,5,0,0:0:0:0:
+117.78723,31.999992,0,1,0,0:0:0:0:
+217.87234,31.999992,0,1,0,0:0:0:0:
+32.680847,130.04254,0,5,0,0:0:0:0:
+118.46808,127.99999,0,1,0,0:0:0:0:
+210.38297,128.68085,0,5,0,0:0:0:0:
+292.08508,127.99999,0,5,0,0:0:0:0:
+34.723404,221.95746,0,6,0,L|147.06381:220.59573,1,100,0:0:0:0:
+204.25531,223.31915,0,2,0,L|314.5532:222.6383,1,100,0:0:0:0:
+378.5532,224.68085,0,2,0,L|490.21274:223.31915,1,100,0:0:0:0:
+28.595749,302.97873,0,6,0,L|143.65958:302.97873,1,100,0:0:0:0:
+206.29785,307.7447,0,2,0,L|311.1489:307.06384,1,100,0:0:0:0:
+390.12766,310.46808,0,6,0,L|494.29788:264.85107,1,100,0:0:0:0:
+481.72964,270.3548,0,6,0,L|460.25528:374.46808,1,100,0:0:0:0:

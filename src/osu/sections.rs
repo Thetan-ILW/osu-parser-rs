@@ -1,7 +1,7 @@
 // This is a module that stores section structures. 
 // Logic to these structures is implemented in other modules
 use crate::osu;
-use osu::{Mode, OverlayPosition, SampleSet, Color};
+use osu::Color;
 use osu::timing::TimePoint;
 use osu::note::{HitObject, Circle, Slider, Spinner, Hold};
 
@@ -10,12 +10,12 @@ pub struct General {
     pub audio_lead_in: f64,
     pub preview_time: f64,
     pub countdown: u32,
-    pub sample_set: SampleSet,
+    pub sample_set: String,
     pub stack_leniency: f64,
-    pub mode: Mode,
+    pub mode: u8,
     pub letter_box_in_breaks: bool,
     pub use_skin_sprites: bool,
-    pub overlay_position: OverlayPosition,
+    pub overlay_position: String,
     pub skin_preference: String,
     pub epilepsy_warning: bool,
     pub countdown_offset: u32,
@@ -31,12 +31,12 @@ impl Default for General {
             audio_lead_in: 0.0,
             preview_time: -1.0,
             countdown: 1,
-            sample_set: SampleSet::Normal,
+            sample_set: String::new(),
             stack_leniency: 0.7,
-            mode: Mode::Osu,
+            mode: 0,
             letter_box_in_breaks: false,
             use_skin_sprites: false,
-            overlay_position: OverlayPosition::NoChange,
+            overlay_position: String::from("NoChange"),
             skin_preference: String::new(),
             epilepsy_warning: false,
             countdown_offset: 0,

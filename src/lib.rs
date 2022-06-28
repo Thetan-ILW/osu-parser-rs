@@ -103,7 +103,7 @@ mod tests {
 
         let beatmap = match beatmap {
             Ok(beatmap) => beatmap,
-            Err(e) => panic!("|| failed to parse beatmap: {}", e),
+            Err(e) => panic!("🥶 failed to parse beatmap: {}", e),
         };
 
         assert_eq!(beatmap.info.general.preview_time, -69.0);
@@ -114,18 +114,19 @@ mod tests {
     }
     #[test]
     fn import_only_hit_objects() {
-        let filename = String::from("test_files/beatmap.osu");
+        let filename = String::from("test_files/refactor.osu");
         let hit_objects = crate::import_hit_objects(filename);
 
         let hit_objects = match hit_objects {
             Ok(hit_objects) => hit_objects,
-            Err(e) => panic!("|| failed to parse beatmap: {}", e),
+            Err(e) => panic!("🥶 failed to parse beatmap: {}", e),
         };
 
-        let circle = &hit_objects.circles[0];
-        assert_eq!(circle.x, 81.02127);
-        assert_eq!(circle.y, 72.85107);
-        assert_eq!(circle.time, 0.0);
+        let filename = String::from("test_files/refactor-spinnerz.osu");
+        let hit_objects = crate::import_hit_objects(filename);
+
+        let filename = String::from("test_files/refactor-holds.osu");
+        let hit_objects = crate::import_hit_objects(filename);
     }
     #[test]
     fn color_test() {
@@ -134,7 +135,7 @@ mod tests {
 
         let beatmap = match beatmap {
             Ok(beatmap) => beatmap,
-            Err(e) => panic!("|| failed to parse beatmap: {}", e),
+            Err(e) => panic!("🥶 failed to parse beatmap: {}", e),
         };
 
         let color = beatmap.info.colors.data[0].clone();
@@ -157,17 +158,20 @@ mod tests {
     #[test]
     fn import_and_export() {
         let filename = String::from("test_files/beatmap.osu");
+        let now = std::time::Instant::now();
         let beatmap = crate::import(filename);
 
         let beatmap = match beatmap {
             Ok(beatmap) => beatmap,
-            Err(e) => panic!("|| failed to parse beatmap: {}", e),
+            Err(e) => panic!("🥶 failed to parse beatmap: {}", e),
         };
-
+        let import_time = now.elapsed().as_secs_f64();
+        println!("Imported in {}", import_time);
         let result = crate::export("test_files/export/new.osu", beatmap);
         match result {
             Ok(_) => println!("success"),
             Err(e) => panic!("uhhh ummm {e}")
         }
+        println!("Exported in {}", now.elapsed().as_secs_f64() - import_time)
     }
 }
