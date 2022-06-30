@@ -6,10 +6,8 @@ practice project, don’t expect much
 - General, editor, metadata, difficulty, timing points, colors and hit objects parsing
 
 ### Todo:
-- Parsing events
-- Refactor notedata.rs (never)
+- Completely redo hit objects
 - Exporting
-- Multithreading (we need more speed!)
 ____
 ## Usage:
 Add this to your Cargo.toml file:
@@ -30,19 +28,19 @@ let beatmap = match beatmap {
 ```
 Access to metadata fields
 ```rust
-let general = &beatmap.settings.general;
-let metadata = &beatmap.settings.metadata;
+let general = &beatmap.info.general;
+let metadata = &beatmap.info.metadata;
 
 println!("{}", general.audio_filename);
 println!("{} - {}", metadata.artist, metadata.title);
 ```
 Access to notes
 ```rust
-let circle = &beatmap.note_data.circles[0];
+let circle = &beatmap.hit_objects.circles[0];
 let circle_x = circle.x;
 let circle_y = circle.y;
 
-let slider = &beatmap.note_data.sliders[0];
+let slider = &beatmap.hit_objects.sliders[0];
 let slider_time = slider.time;
 let slider_length = slider.other.length;
 ```
