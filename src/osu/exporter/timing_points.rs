@@ -13,17 +13,16 @@ pub fn get(timing_points: &TimingPoints) -> String {
     }
     
     for t in timing_points {
-        let time = t.time;
-        let beat_length = t.beat_length;
-        let meter = t.meter;
-        let sample_set = t.sample_set;
-        let sample_index = t.sample_index;
-        let volume = t.volume;
-        let uninherited = t.uninherited as i32;
-        let effects = t.effects;
-
         let line = format!(
-            "{time},{beat_length},{meter},{sample_set},{sample_index},{volume},{uninherited},{effects}"
+            "{},{},{},{},{},{},{},{}",
+            t.time,
+            t.beat_length,
+            t.meter,
+            t.sample_set,
+            t.sample_index,
+            t.volume,
+            t.uninherited as i32,
+            t.effects
         );
         writeln!(&mut lines, "{line}").unwrap();
     }

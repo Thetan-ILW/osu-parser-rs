@@ -157,21 +157,22 @@ mod tests {
 
     #[test]
     fn import_and_export() {
-        let filename = String::from("test_files/beatmap.osu");
+        let filename = String::from("test_files/help/Suzuyu - Light a Way (lit120) [Future Dreams].osu");
         let now = std::time::Instant::now();
         let beatmap = crate::import(filename);
 
-        let beatmap = match beatmap {
+        let mut beatmap = match beatmap {
             Ok(beatmap) => beatmap,
             Err(e) => panic!("🥶 failed to parse beatmap: {}", e),
         };
-        let import_time = now.elapsed().as_secs_f64();
+        let import_time = now.elapsed().as_millis();
         println!("Imported in {}", import_time);
-        let result = crate::export("test_files/export/new.osu", beatmap);
+        beatmap.info.metadata.version = "exported".to_string();
+        let result = crate::export("test_files/help/new.osu", beatmap);
         match result {
             Ok(_) => println!("success"),
             Err(e) => panic!("uhhh ummm {e}")
         }
-        println!("Exported in {}", now.elapsed().as_secs_f64() - import_time)
+        println!("Exported in {}", now.elapsed().as_millis() - import_time)
     }
 }

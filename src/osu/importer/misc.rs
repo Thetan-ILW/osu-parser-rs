@@ -7,8 +7,10 @@ use osu::importer::key_value;
 use osu::sections::{Colors, Events};
 
 impl Import for Events {
-    fn parse(_section: &Vec<String>) -> Self {
-        Events {}
+    fn parse(section: &Vec<String>) -> Self {
+        Events {
+            data: section.clone()
+        }
     }
 }
 

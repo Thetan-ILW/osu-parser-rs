@@ -13,38 +13,39 @@ pub fn get_general(g: &General) -> String {
     if g.audio_filename.len() != 0 {
         writeln!(&mut lines, "AudioFilename: {}", g.audio_filename).unwrap();
     }
-    
-    writeln!(&mut lines, "AudioLeadIn: {}", g.audio_lead_in).unwrap();
-    writeln!(&mut lines, "PreviewTime: {}", g.preview_time).unwrap();
-    writeln!(&mut lines, "Countdown: {}", g.countdown).unwrap();
-    writeln!(&mut lines, "SampleSet: {}", g.sample_set).unwrap();
-    writeln!(&mut lines, "StackLeniency: {}", g.stack_leniency).unwrap();
-    writeln!(&mut lines, "Mode: {}", g.mode).unwrap();
-    writeln!(&mut lines, "LetterboxInBreaks: {}", g.letter_box_in_breaks as u8).unwrap();
-    
-    if g.use_skin_sprites == true {
-        writeln!(&mut lines, "UseSkinSprites: {}", 1).unwrap();
-    }
 
-    if g.skin_preference.len() != 0 {
-        writeln!(&mut lines, "SkinPreference: {}", g.skin_preference).unwrap();
-    }
+    let formated = format!(
+"AudioLeadIn: {}
+PreviewTime: {}
+Countdown: {}
+SampleSet: {}
+StackLeniency: {}
+Mode: {}
+LetterboxInBreaks: {}
+UseSkinSprites: {}
+SkinPreference: {}
+EpilepsyWarning: {}
+CountdownOffset: {}
+SpecialStyle: {}
+WidescreenStoryboard: {}
+SamplesMatchPlaybackRate: {}",
+        g.audio_lead_in, 
+        g.preview_time,
+        g.countdown,
+        g.sample_set,
+        g.stack_leniency,
+        g.mode,
+        g.letter_box_in_breaks as u8,
+        g.use_skin_sprites as u8,
+        g.skin_preference,
+        g.epilepsy_warning as u8,
+        g.countdown_offset,
+        g.special_style as u8,
+        g.widescreen_storyboard as u8,
+        g.samples_match_playback_rate as u8
+    );
 
-    if g.epilepsy_warning == true {
-        writeln!(&mut lines, "EpilepsyWarning: {}", 1).unwrap();
-    }
-
-    if g.countdown_offset != 0 {
-        writeln!(&mut lines, "CountdownOffset: {}", g.countdown_offset).unwrap();
-    }
-
-    if g.special_style == true {
-        writeln!(&mut lines, "SpecialStyle: {}", 1).unwrap();
-    }
-
-    writeln!(&mut lines, "WidescreenStoryboard: {}", g.widescreen_storyboard as u8).unwrap();
-    writeln!(&mut lines, "SamplesMatchPlaybackRate: {}", g.samples_match_playback_rate as u8).unwrap();
-
+    writeln!(&mut lines, "{formated}").unwrap();
     return lines;
 }
 
@@ -68,10 +69,18 @@ pub fn get_editor(e: &Editor) -> String {
         writeln!(&mut lines, "Bookmarks: {}", bookmarks).unwrap();
     }
 
-    writeln!(&mut lines, "DistanceSpacing: {}", e.distance_spacing).unwrap();
-    writeln!(&mut lines, "BeatDivisor: {}", e.beat_divisor).unwrap();
-    writeln!(&mut lines, "GridSize: {}", e.grid_size).unwrap();
-    writeln!(&mut lines, "TimelineZoom: {}", e.timeline_zoom).unwrap();
+    let formated = format!(
+"DistanceSpacing: {}
+BeatDivisor: {}
+GridSize: {}
+TimelineZoom: {}",
+        e.distance_spacing,
+        e.beat_divisor,
+        e.grid_size,
+        e.timeline_zoom
+    );
+
+    writeln!(&mut lines, "{formated}").unwrap();
 
     return lines
 }
@@ -83,12 +92,22 @@ pub fn get_metadata(m: &Metadata) -> String {
         return lines
     }
 
-    writeln!(&mut lines, "Title: {}", m.title).unwrap();
-    writeln!(&mut lines, "TitleUnicode: {}", m.title_unicode).unwrap();
-    writeln!(&mut lines, "Artist: {}", m.artist).unwrap();
-    writeln!(&mut lines, "ArtistUnicode: {}", m.artist_unicode).unwrap();
-    writeln!(&mut lines, "Creator: {}", m.creator).unwrap();
-    writeln!(&mut lines, "Version: {}", m.version).unwrap();
+    let formated = format!(
+"Title: {}
+TitleUnicode: {}
+Artist: {}
+ArtistUnicode: {}
+Creator: {}
+Version: {}",
+        m.title,
+        m.title_unicode,
+        m.artist,
+        m.artist_unicode,
+        m.creator,
+        m.version
+    );
+
+    writeln!(&mut lines, "{formated}").unwrap();
     
     if m.source.len() != 0 {
         writeln!(&mut lines, "Source: {}", m.source).unwrap();
@@ -107,11 +126,11 @@ pub fn get_metadata(m: &Metadata) -> String {
         writeln!(&mut lines, "Tags: {}", tags).unwrap();
     }
 
-    if m.beatmap_id > -1 {
+    if m.beatmap_id > 0 {
         writeln!(&mut lines, "BeatmapId: {}", m.beatmap_id).unwrap();
     }
 
-    if m.beatmap_set_id > -1 {
+    if m.beatmap_set_id > 0 {
         writeln!(&mut lines, "BeatmapSetId: {}", m.beatmap_set_id).unwrap();
     }
 
@@ -125,11 +144,21 @@ pub fn get_diffuclty(d: &Difficulty) -> String {
         return lines
     }
 
-    writeln!(&mut lines, "HPDrainRate: {}", d.hp_drain_rate).unwrap();
-    writeln!(&mut lines, "CircleSize: {}", d.circle_size).unwrap();
-    writeln!(&mut lines, "OverallDifficulty: {}", d.overall_difficulty).unwrap();
-    writeln!(&mut lines, "ApproachRate: {}", d.approach_rate).unwrap();
-    writeln!(&mut lines, "SliderMultiplier: {}", d.slider_multiplier).unwrap();
-    writeln!(&mut lines, "SliderTickRate: {}", d.slider_tick_rate).unwrap();
+    let formated = format!(
+"HPDrainRate: {}
+CircleSize: {}
+OverallDifficulty: {}
+ApproachRate: {}
+SliderMultiplier: {}
+SliderTickRate: {}",
+        d.hp_drain_rate,
+        d.circle_size,
+        d.overall_difficulty,
+        d.approach_rate,
+        d.slider_multiplier,
+        d.slider_tick_rate
+    );
+
+    writeln!(&mut lines, "{formated}").unwrap();
     return lines
 }

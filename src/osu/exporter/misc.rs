@@ -1,7 +1,18 @@
 use crate::osu;
-use osu::sections::Colors;
+use osu::sections::{Events, Colors};
 
 use std::fmt::Write;
+
+pub fn get_events(e: &Events) -> String {
+    let events = &e.data;
+    let mut lines = String::new();
+
+    for line in events {
+        writeln!(&mut lines, "{line}").unwrap()
+    }
+
+    return lines
+}
 
 pub fn get_colors(colors: &Colors) -> String {
     let colors = &colors.data;
@@ -20,7 +31,7 @@ pub fn get_colors(colors: &Colors) -> String {
     for color in colors {
         if let Err(e) = writeln!(
             &mut lines, 
-            "Combo{i} : {}, {}, {}", color.0, color.1, color.2
+            "Combo{i} : {},{},{}", color.0, color.1, color.2
         ) {
             println!("{e}");
         }

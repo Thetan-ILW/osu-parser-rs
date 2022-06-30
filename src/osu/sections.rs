@@ -93,7 +93,9 @@ impl Default for Difficulty {
 }
 
 #[derive(Default)]
-pub struct Events {}
+pub struct Events {
+    pub data: Vec<String>
+}
 
 #[derive(Default)]
 pub struct TimingPoints {
