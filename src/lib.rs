@@ -46,7 +46,11 @@ pub fn import_hit_objects(filename: String) -> Result<HitObjects, Error> {
 pub fn export(path: &str, beatmap: Beatmap) -> Result<(), Error> {
     let file = File::create(path)?;
     let mut writer = LineWriter::new(file);
-    exporter::write_to_osu(&mut writer, beatmap);
+    match exporter::write_to_osu(&mut writer, beatmap) {
+        Ok(_) => println!("Exported"),
+        Err(e) => println!("FAILED TO EXPORT 😖😖😖: {e}")
+    }
+
     writer.flush()?;
     return Ok(())
 }
@@ -157,7 +161,7 @@ mod tests {
 
     #[test]
     fn import_and_export() {
-        let filename = String::from("test_files/help/Suzuyu - Light a Way (lit120) [Future Dreams].osu");
+        let filename = String::from("test_files/refactor-spinnerz.osu");
         let now = std::time::Instant::now();
         let beatmap = crate::import(filename);
 
@@ -168,7 +172,7 @@ mod tests {
         let import_time = now.elapsed().as_millis();
         println!("Imported in {}", import_time);
         beatmap.info.metadata.version = "exported".to_string();
-        let result = crate::export("test_files/help/new.osu", beatmap);
+        let result = crate::export("test_files/new.osu", beatmap);
         match result {
             Ok(_) => println!("success"),
             Err(e) => panic!("uhhh ummm {e}")

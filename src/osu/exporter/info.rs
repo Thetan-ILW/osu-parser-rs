@@ -2,16 +2,14 @@ use crate::osu;
 use osu::sections::{General, Editor, Metadata, Difficulty};
 
 use std::fmt::Write;
+use std::fmt::Error;
 
-pub fn get_general(g: &General) -> String {
+pub fn get_general(g: &General) -> Result<String, Error> {
     let mut lines = String::new();
-    if let Err(e) = writeln!(&mut lines, "[General]") {
-        println!("{e}");
-        return lines
-    }
+    writeln!(&mut lines, "[General]")?;
 
     if g.audio_filename.len() != 0 {
-        writeln!(&mut lines, "AudioFilename: {}", g.audio_filename).unwrap();
+        writeln!(&mut lines, "AudioFilename: {}", g.audio_filename)?;
     }
 
     let formated = format!(
@@ -45,16 +43,13 @@ SamplesMatchPlaybackRate: {}",
         g.samples_match_playback_rate as u8
     );
 
-    writeln!(&mut lines, "{formated}").unwrap();
-    return lines;
+    writeln!(&mut lines, "{formated}")?;
+    return Ok(lines);
 }
 
-pub fn get_editor(e: &Editor) -> String {
+pub fn get_editor(e: &Editor) -> Result<String, Error> {
     let mut lines = String::new();
-    if let Err(e) = writeln!(&mut lines, "[Editor]") {
-        println!("{e}");
-        return lines
-    }
+    writeln!(&mut lines, "[Editor]")?;
 
     if e.bookmarks.len() != 0 {
         let mut bookmarks = String::new();
@@ -66,7 +61,7 @@ pub fn get_editor(e: &Editor) -> String {
             }
         }
 
-        writeln!(&mut lines, "Bookmarks: {}", bookmarks).unwrap();
+        writeln!(&mut lines, "Bookmarks: {}", bookmarks)?;
     }
 
     let formated = format!(
@@ -80,17 +75,14 @@ TimelineZoom: {}",
         e.timeline_zoom
     );
 
-    writeln!(&mut lines, "{formated}").unwrap();
+    writeln!(&mut lines, "{formated}")?;
 
-    return lines
+    return Ok(lines)
 }
 
-pub fn get_metadata(m: &Metadata) -> String {
+pub fn get_metadata(m: &Metadata) -> Result<String, Error> {
     let mut lines = String::new();
-    if let Err(e) = writeln!(&mut lines, "[Metadata]") {
-        println!("{e}");
-        return lines
-    }
+    writeln!(&mut lines, "[Metadata]")?;
 
     let formated = format!(
 "Title: {}
@@ -107,10 +99,10 @@ Version: {}",
         m.version
     );
 
-    writeln!(&mut lines, "{formated}").unwrap();
+    writeln!(&mut lines, "{formated}")?;
     
     if m.source.len() != 0 {
-        writeln!(&mut lines, "Source: {}", m.source).unwrap();
+        writeln!(&mut lines, "Source: {}", m.source)?;
     }
 
     if m.tags.len() != 0 {
@@ -123,26 +115,23 @@ Version: {}",
             }
         }
 
-        writeln!(&mut lines, "Tags: {}", tags).unwrap();
+        writeln!(&mut lines, "Tags: {}", tags)?
     }
 
     if m.beatmap_id > 0 {
-        writeln!(&mut lines, "BeatmapId: {}", m.beatmap_id).unwrap();
+        writeln!(&mut lines, "BeatmapId: {}", m.beatmap_id)?;
     }
 
     if m.beatmap_set_id > 0 {
-        writeln!(&mut lines, "BeatmapSetId: {}", m.beatmap_set_id).unwrap();
+        writeln!(&mut lines, "BeatmapSetId: {}", m.beatmap_set_id)?;
     }
 
-    return lines
+    return Ok(lines)
 }
 
-pub fn get_diffuclty(d: &Difficulty) -> String {
+pub fn get_diffuclty(d: &Difficulty) -> Result<String, Error> {
     let mut lines = String::new();
-    if let Err(e) = writeln!(&mut lines, "[Difficulty]") {
-        println!("{e}");
-        return lines
-    }
+    writeln!(&mut lines, "[Difficulty]")?;
 
     let formated = format!(
 "HPDrainRate: {}
@@ -159,6 +148,6 @@ SliderTickRate: {}",
         d.slider_tick_rate
     );
 
-    writeln!(&mut lines, "{formated}").unwrap();
-    return lines
+    writeln!(&mut lines, "{formated}")?;
+    return Ok(lines)
 }

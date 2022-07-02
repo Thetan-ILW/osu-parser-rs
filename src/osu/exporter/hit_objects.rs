@@ -3,21 +3,20 @@ use osu::note::{HitObject, Circle, Slider};
 use osu::sections::HitObjects;
 
 use std::fmt::Write;
+use std::fmt::Error;
 
-pub fn get(h: &HitObjects) -> String {
+#[allow(unused_must_use)]
+pub fn get(h: &HitObjects) -> Result<String, Error> {
     let mut lines = String::new();
 
-    if let Err(e) = writeln!(&mut lines, "[HitObjects]") {
-        println!("{e}");
-        return lines
-    }
+    writeln!(&mut lines, "[HitObjects]")?;
 
     // You have no idea how tired I am of working on this shit
 
-    return lines
+    return Ok(lines)
 }
 
-fn write_circle(lines: &mut String, c: &HitObject<Circle>) {
+fn write_circle(c: &HitObject<Circle>) -> String{
     let line = format!(
         "{},{},{},{},{},{}",
         c.x,
@@ -28,10 +27,10 @@ fn write_circle(lines: &mut String, c: &HitObject<Circle>) {
         c.hit_sample
     );
 
-    writeln!(lines, "{line}").unwrap();
+    return line
 }
 
-fn write_slider(lines: &mut String, s: &HitObject<Slider>) {
+fn write_slider(lines: &mut String, s: &HitObject<Slider>) -> String {
     let edge_sounds = format!(
         "{}|{}",
         s.other.edge_sounds[0],
@@ -59,5 +58,5 @@ fn write_slider(lines: &mut String, s: &HitObject<Slider>) {
         s.hit_sample
     );
 
-    writeln!(lines, "{line}").unwrap();
+    return line
 }

@@ -2,15 +2,13 @@ use crate::osu;
 use osu::sections::TimingPoints;
 
 use std::fmt::Write;
+use std::fmt::Error;
 
-pub fn get(timing_points: &TimingPoints) -> String {
+pub fn get(timing_points: &TimingPoints) -> Result<String, Error> {
     let timing_points = &timing_points.data;
     let mut lines = String::new();
 
-    if let Err(e) = writeln!(&mut lines, "[TimingPoints]") {
-        println!("{e}");
-        return lines
-    }
+    writeln!(&mut lines, "[TimingPoints]")?;
     
     for t in timing_points {
         let line = format!(
@@ -24,8 +22,8 @@ pub fn get(timing_points: &TimingPoints) -> String {
             t.uninherited as i32,
             t.effects
         );
-        writeln!(&mut lines, "{line}").unwrap();
+        writeln!(&mut lines, "{line}")?;
     }
 
-    return lines
+    return Ok(lines)
 }
