@@ -5,7 +5,6 @@ use osu::sections::HitObjects;
 use std::fmt::Write;
 use std::fmt::Error;
 
-#[allow(unused_must_use)]
 pub fn get(h: &HitObjects) -> Result<String, Error> {
     let mut lines = String::new();
 
