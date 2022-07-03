@@ -61,7 +61,7 @@ mod tests {
 
     #[test]
     fn import_and_export() {
-        let filename = String::from("test_files/refactor-spinnerz.osu");
+        let filename = String::from("test_files/refactor-holds.osu");
         let now = std::time::Instant::now();
         let beatmap = crate::import(filename);
 

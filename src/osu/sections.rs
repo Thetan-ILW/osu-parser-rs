@@ -3,7 +3,7 @@
 use crate::osu;
 use osu::Color;
 use osu::timing::TimePoint;
-use osu::note::{HitObject, Circle, Slider, Spinner, Hold};
+use osu::note::{NoteType, HitObject, Circle, Slider, Spinner, Hold};
 
 pub struct General {
     pub audio_filename: String,
@@ -109,6 +109,7 @@ pub struct Colors {
 
 #[derive(Default)]
 pub struct HitObjects {
+    pub order: Vec<NoteType>,
     pub circles: Vec<HitObject<Circle>>,
     pub sliders: Vec<HitObject<Slider>>,
     pub spinners: Vec<HitObject<Spinner>>,

@@ -25,3 +25,10 @@ pub struct Slider {
     pub edge_sounds: [u8; 2],
     pub edge_sets: [String; 2],
 }
+
+pub enum NoteType {
+    Circle,
+    Slider,
+    Spinner,
+    Hold
+}

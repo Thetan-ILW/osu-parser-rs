@@ -9,6 +9,9 @@ use osu::exporter;
 use osu::{Info, Beatmap};
 use osu::sections::{TimingPoints, HitObjects};
 
+#[cfg(test)]
+mod tests;
+
 pub fn import(filename: String) -> Result<Beatmap, Error> {
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;

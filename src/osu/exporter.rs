@@ -1,7 +1,7 @@
 mod info;
 mod misc;
 mod timing_points;
-//mod hit_objects;
+mod hit_objects;
 
 use std::fs::File;
 use std::io::{prelude::*, LineWriter, Error};
@@ -20,7 +20,7 @@ pub fn write_to_osu(w: &mut LineWriter<File>, beatmap: Beatmap) -> Result<(), Er
     let events = misc::get_events(&beatmap.info.events).unwrap_or_default();
     let timing_points = timing_points::get(&beatmap.timing_points).unwrap_or_default();
     let colors = misc::get_colors(&beatmap.info.colors).unwrap_or_default();
-    //let hit_objects = hit_objects::get(&beatmap.hit_objects).unwrap_or_default();
+    let hit_objects = hit_objects::get(&beatmap.hit_objects).unwrap_or_default();
 
     w.write_all(version.as_bytes())?;
     w.write_all(NEW_LINE)?;
@@ -38,6 +38,6 @@ pub fn write_to_osu(w: &mut LineWriter<File>, beatmap: Beatmap) -> Result<(), Er
     w.write_all(NEW_LINE)?;
     w.write_all(colors.as_bytes())?;
     w.write_all(NEW_LINE)?;
-    //w.write_all(hit_objects.as_bytes())?;
+    w.write_all(hit_objects.as_bytes())?;
     return Ok(())
 }
