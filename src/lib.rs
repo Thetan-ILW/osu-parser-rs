@@ -12,7 +12,7 @@ use osu::sections::{TimingPoints, HitObjects};
 #[cfg(test)]
 mod tests;
 
-pub fn import(filename: String) -> Result<Beatmap, Error> {
+pub fn import(filename: &str) -> Result<Beatmap, Error> {
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
 
@@ -28,19 +28,19 @@ pub fn import(filename: String) -> Result<Beatmap, Error> {
 }
 
 // It looks terrible
-pub fn import_info(filename: String) -> Result<Info, Error> {
+pub fn import_info(filename: &str) -> Result<Info, Error> {
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
     return Ok(importer::get_info(&data));
 }
 
-pub fn import_timing_points(filename: String) -> Result<TimingPoints, Error> {
+pub fn import_timing_points(filename: &str) -> Result<TimingPoints, Error> {
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
     return Ok(importer::get_timing_points(&data))
 }
 
-pub fn import_hit_objects(filename: String) -> Result<HitObjects, Error> {
+pub fn import_hit_objects(filename: &str) -> Result<HitObjects, Error> {
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
     return Ok(importer::get_hit_objects(&data))

@@ -26,12 +26,12 @@ pub fn get(h: &HitObjects) -> Result<String, Error> {
             }
             NoteType::Spinner => {
                 let spinner = get_spinner_line(&h.spinners[spinner_i]);
-                writeln!(&mut lines, "{spinner}");
+                writeln!(&mut lines, "{spinner}")?;
                 spinner_i += 1;
             }
             NoteType::Hold => {
                 let hold = get_hold_line(&h.holds[hold_i]);
-                writeln!(&mut lines, "{hold}");
+                writeln!(&mut lines, "{hold}")?;
                 hold_i += 1;
             } 
         }

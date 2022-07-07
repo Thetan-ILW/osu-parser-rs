@@ -6,8 +6,8 @@ practice project, don’t expect much
 - General, editor, metadata, difficulty, timing points, colors and hit objects parsing
 
 ### Todo:
+- Import from bufreader, string, file and path
 - Completely redo hit objects
-- Exporting
 ____
 ## Usage:
 Add this to your Cargo.toml file:

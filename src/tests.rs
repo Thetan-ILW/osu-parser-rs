@@ -3,7 +3,7 @@ mod tests {
     #[test]
     fn import_beatmap() {
         let filename = String::from("test_files/beatmap.osu");
-        let beatmap = crate::import(filename);
+        let beatmap = crate::import(&filename);
 
         let beatmap = match beatmap {
             Ok(beatmap) => beatmap,
@@ -19,7 +19,7 @@ mod tests {
     #[test]
     fn import_only_hit_objects() {
         let filename = String::from("test_files/refactor.osu");
-        let hit_objects = crate::import_hit_objects(filename);
+        let hit_objects = crate::import_hit_objects(&filename);
 
         let hit_objects = match hit_objects {
             Ok(hit_objects) => hit_objects,
@@ -27,15 +27,15 @@ mod tests {
         };
 
         let filename = String::from("test_files/refactor-spinnerz.osu");
-        let hit_objects = crate::import_hit_objects(filename);
+        let hit_objects = crate::import_hit_objects(&filename);
 
         let filename = String::from("test_files/refactor-holds.osu");
-        let hit_objects = crate::import_hit_objects(filename);
+        let hit_objects = crate::import_hit_objects(&filename);
     }
     #[test]
     fn color_test() {
         let filename = String::from("test_files/colortest.osu");
-        let beatmap = crate::import(filename);
+        let beatmap = crate::import(&filename);
 
         let beatmap = match beatmap {
             Ok(beatmap) => beatmap,
@@ -51,7 +51,7 @@ mod tests {
     #[test]
     fn open_blank_beatmap() {
         let filename = String::from("test_files/blank.osu");
-        let beatmap = crate::import(filename);
+        let beatmap = crate::import(&filename);
 
         let _beatmap = match beatmap {
             Ok(beatmap) => beatmap,
@@ -63,7 +63,7 @@ mod tests {
     fn import_and_export() {
         let filename = String::from("test_files/refactor-holds.osu");
         let now = std::time::Instant::now();
-        let beatmap = crate::import(filename);
+        let beatmap = crate::import(&filename);
 
         let mut beatmap = match beatmap {
             Ok(beatmap) => beatmap,
