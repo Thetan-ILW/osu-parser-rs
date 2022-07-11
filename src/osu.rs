@@ -3,6 +3,7 @@ pub mod importer;
 pub mod note;
 pub mod sections;
 pub mod timing;
+pub mod event;
 
 use crate::osu::sections::{
     General, Editor, Metadata, 

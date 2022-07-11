@@ -8,11 +8,7 @@ pub fn get_events(e: &Events) -> Result<String, Error> {
     let events = &e.data;
     let mut lines = String::new();
 
-    writeln!(&mut lines, "[Colours]")?;
-
-    for line in events {
-        writeln!(&mut lines, "{line}")?
-    }
+    writeln!(&mut lines, "[Events]")?;
 
     return Ok(lines)
 }

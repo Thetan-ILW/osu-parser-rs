@@ -3,6 +3,7 @@
 use crate::osu;
 use osu::Color;
 use osu::timing::TimePoint;
+use osu::event::Event;
 use osu::note::{NoteType, HitObject, Circle, Slider, Spinner, Hold};
 
 pub struct General {
@@ -94,7 +95,7 @@ impl Default for Difficulty {
 
 #[derive(Default)]
 pub struct Events {
-    pub data: Vec<String>
+    pub data: Vec<Event>
 }
 
 #[derive(Default)]

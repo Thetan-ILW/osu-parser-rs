@@ -2,14 +2,46 @@ use std::collections::BTreeMap;
 
 use crate::osu;
 use osu::Color;
+use osu::event::Event;
 use osu::importer::Import;
 use osu::importer::key_value;
 use osu::sections::{Colors, Events};
 
 impl Import for Events {
     fn parse(section: &Vec<String>) -> Self {
+        let mut events: Vec<Event> = vec![];
+
+        for line in section {
+            if line.len() == 0 {
+                continue;
+            }
+
+            if let Some(c) = line.chars().next() {
+                if c == '/' {
+                    continue;
+                }
+            }
+            
+            let split: Vec<&str> = line.splitn(3, ',').collect();
+
+            if split.len() != 3 {
+                continue;
+            }
+
+            let e_type = split[0].to_string();
+            let start_time = split[1].parse::<f64>().unwrap_or_default();
+            let params: Vec<&str> = split[2].split(",").collect();
+            let params: Vec<String> = params.iter().map(|&s|s.into()).collect();
+
+            events.push(Event {
+                e_type,
+                start_time,
+                params
+            })
+        };
+
         Events {
-            data: section.clone()
+            data: events
         }
     }
 }
