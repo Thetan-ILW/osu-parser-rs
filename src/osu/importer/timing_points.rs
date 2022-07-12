@@ -1,6 +1,6 @@
 use crate::osu;
 use osu::sections::TimingPoints;
-use osu::timing::TimePoint;
+use osu::TimePoint;
 use osu::importer::Import;
 
 impl Import for TimingPoints {

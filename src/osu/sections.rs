@@ -1,9 +1,8 @@
 // This is a module that stores section structures. 
 // Logic to these structures is implemented in other modules
 use crate::osu;
-use osu::Color;
-use osu::timing::TimePoint;
-use osu::event::Event;
+use osu::{TimePoint, Color};
+use osu::Event;
 use osu::note::{NoteType, HitObject, Circle, Slider, Spinner, Hold};
 
 pub struct General {

@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::osu;
 use osu::Color;
-use osu::event::Event;
+use osu::Event;
 use osu::importer::Import;
 use osu::importer::key_value;
 use osu::sections::{Colors, Events};
