@@ -13,7 +13,13 @@ pub fn get_events(e: &Events) -> Result<String, Error> {
     for event in events {
         let e_type = event.e_type.clone();
         let start_time = event.start_time;
-        let params = event.params.join(",");
+        let mut params = event.params.clone();
+
+        if e_type == "0" {
+            params[0] = format!(r#""{}""#, params[0]);
+        }
+
+        let params = params.join(",");
         writeln!(&mut lines, "{},{},{}", e_type, start_time, params)?;
     }
 

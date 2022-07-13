@@ -70,14 +70,19 @@ mod tests {
             Ok(beatmap) => beatmap,
             Err(e) => panic!("🥶 failed to parse beatmap: {}", e),
         };
+
         let import_time = now.elapsed().as_millis();
         println!("Imported in {}", import_time);
+
+        assert_eq!(beatmap.info.events.data[0].params[0], "kody_title.jpg".to_string());
+
         beatmap.info.metadata.version = "exported".to_string();
         let result = crate::export("test_files/new.osu", beatmap);
         match result {
             Ok(_) => println!("success"),
             Err(e) => panic!("uhhh ummm {e}")
         }
+        
         println!("Exported in {}", now.elapsed().as_millis() - import_time)
     }
 }

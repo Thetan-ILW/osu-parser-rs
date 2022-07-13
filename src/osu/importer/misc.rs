@@ -31,7 +31,11 @@ impl Import for Events {
             let e_type = split[0].to_string();
             let start_time = split[1].parse::<f64>().unwrap_or_default();
             let params: Vec<&str> = split[2].split(",").collect();
-            let params: Vec<String> = params.iter().map(|&s|s.into()).collect();
+            let mut params: Vec<String> = params.iter().map(|&s|s.into()).collect();
+
+            if e_type == "0" {
+                params[0] = params[0].replace(r#"""#, "");
+            }
 
             events.push(Event {
                 e_type,
