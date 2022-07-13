@@ -10,6 +10,13 @@ pub fn get_events(e: &Events) -> Result<String, Error> {
 
     writeln!(&mut lines, "[Events]")?;
 
+    for event in events {
+        let e_type = event.e_type.clone();
+        let start_time = event.start_time;
+        let params = event.params.join(",");
+        writeln!(&mut lines, "{},{},{}", e_type, start_time, params)?;
+    }
+
     return Ok(lines)
 }
 
