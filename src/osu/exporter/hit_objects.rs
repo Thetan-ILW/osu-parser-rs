@@ -10,29 +10,27 @@ pub fn get(h: &HitObjects) -> Result<String, Error> {
 
     writeln!(&mut lines, "[HitObjects]")?;
 
-    let (mut circle_i, mut slider_i, mut spinner_i, mut hold_i) = (0, 0, 0, 0);
-
-    for item in &h.order {
-        match item {
-            NoteType::Circle  => {
-                let circle = get_circle_line(&h.circles[circle_i]);
+    for item in &h.data {
+        match &item.other {
+            NoteType::None => {
+                panic!("lol")
+            },
+            NoteType::Circle(_)  => {
+                let circle = get_circle_line(item);
                 writeln!(&mut lines, "{circle}")?;
-                circle_i += 1
             }
-            NoteType::Slider => {
-                let slider = get_slider_line(&h.sliders[slider_i]);
+            NoteType::Slider(other) => {
+                let slider = get_slider_line(item, other);
                 writeln!(&mut lines, "{slider}")?;
-                slider_i += 1;
+
             }
-            NoteType::Spinner => {
-                let spinner = get_spinner_line(&h.spinners[spinner_i]);
+            NoteType::Spinner(other) => {
+                let spinner = get_spinner_line(item, other);
                 writeln!(&mut lines, "{spinner}")?;
-                spinner_i += 1;
             }
-            NoteType::Hold => {
-                let hold = get_hold_line(&h.holds[hold_i]);
+            NoteType::Hold(other) => {
+                let hold = get_hold_line(item, other);
                 writeln!(&mut lines, "{hold}")?;
-                hold_i += 1;
             } 
         }
     }
@@ -40,7 +38,7 @@ pub fn get(h: &HitObjects) -> Result<String, Error> {
     return Ok(lines)
 }
 
-fn get_circle_line(c: &HitObject<Circle>) -> String{
+fn get_circle_line(c: &HitObject) -> String{
     let line = format!(
         "{},{},{},{},{},{}",
         c.x,
@@ -54,17 +52,17 @@ fn get_circle_line(c: &HitObject<Circle>) -> String{
     return line
 }
 
-fn get_slider_line(s: &HitObject<Slider>) -> String {
+fn get_slider_line(s: &HitObject, other: &Slider) -> String {
     let edge_sounds = format!(
         "{}|{}",
-        s.other.edge_sounds[0],
-        s.other.edge_sounds[1]
+        other.edge_sounds[0],
+        other.edge_sounds[1]
     );
 
     let edge_sets = format!(
         "{}|{}",
-        s.other.edge_sets[0],
-        s.other.edge_sets[1]
+        other.edge_sets[0],
+        other.edge_sets[1]
     );
 
     let line = format!(
@@ -74,9 +72,9 @@ fn get_slider_line(s: &HitObject<Slider>) -> String {
         s.time,
         s.note_type,
         s.hit_sound,
-        s.other.params,
-        s.other.slides,
-        s.other.length,
+        other.params,
+        other.slides,
+        other.length,
         edge_sounds,
         edge_sets,
         s.hit_sample
@@ -85,7 +83,7 @@ fn get_slider_line(s: &HitObject<Slider>) -> String {
     return line
 }
 
-fn get_spinner_line(s: &HitObject<Spinner>) -> String {
+fn get_spinner_line(s: &HitObject, other: &Spinner) -> String {
     let line = format!(
         "{},{},{},{},{},{},{}",
         s.x,
@@ -93,14 +91,14 @@ fn get_spinner_line(s: &HitObject<Spinner>) -> String {
         s.time,
         s.note_type,
         s.hit_sound,
-        s.other.end_time,
+        other.end_time,
         s.hit_sample
     );
 
     return line
 }
 
-fn get_hold_line(h: &HitObject<Hold>) -> String {
+fn get_hold_line(h: &HitObject, other: &Hold) -> String {
     let line = format!(
         "{},{},{},{},{},{}:{}",
         h.x,
@@ -108,7 +106,7 @@ fn get_hold_line(h: &HitObject<Hold>) -> String {
         h.time,
         h.note_type,
         h.hit_sound,
-        h.other.end_time,
+        other.end_time,
         h.hit_sample
     );
 

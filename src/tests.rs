@@ -15,6 +15,7 @@ mod tests {
         assert_eq!(beatmap.info.general.letter_box_in_breaks, false);
         assert_eq!(beatmap.info.general.samples_match_playback_rate, true);
         assert_eq!(beatmap.timing_points.data[0].time, 999.0);
+        assert_eq!(beatmap.hit_objects.data[2].time, 15.0);
         println!("{}", beatmap.info.events.data[0].params[0]);
     }
     #[test]

@@ -109,9 +109,5 @@ pub struct Colors {
 
 #[derive(Default)]
 pub struct HitObjects {
-    pub order: Vec<NoteType>,
-    pub circles: Vec<HitObject<Circle>>,
-    pub sliders: Vec<HitObject<Slider>>,
-    pub spinners: Vec<HitObject<Spinner>>,
-    pub holds: Vec<HitObject<Hold>>,
+    pub data: Vec<HitObject>,
 }

@@ -1,11 +1,11 @@
-pub struct HitObject<T> {
+pub struct HitObject {
     pub x: f32,
     pub y: f32,
     pub time: f64,
     pub note_type: u8,
     pub hit_sound: u8,
     pub hit_sample: String,
-    pub other: T,
+    pub other: NoteType,
 }
 
 pub struct Circle;
@@ -27,8 +27,9 @@ pub struct Slider {
 }
 
 pub enum NoteType {
-    Circle,
-    Slider,
-    Spinner,
-    Hold
+    None,
+    Circle(Circle),
+    Slider(Slider),
+    Spinner(Spinner),
+    Hold(Hold)
 }
