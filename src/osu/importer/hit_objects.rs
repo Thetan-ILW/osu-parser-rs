@@ -1,9 +1,7 @@
-use std::ops::Not;
-
 use crate::osu;
 use osu::importer::Import;
 use osu::sections::HitObjects;
-use osu::note::{NoteType, HitObject, Circle, Slider, Spinner, Hold};
+use osu::note::{Additions, HitObject, Circle, Slider, Spinner, Hold};
 
 impl Import for HitObjects {
     fn parse(section: &Vec<String>) -> Self {
@@ -51,7 +49,7 @@ impl HitObject {
         let note_type = split[3].parse().unwrap_or_else(|_| 0);
         let hit_sound = split[4].parse().unwrap_or_else(|_| 0);
         let hit_sample = String::new();
-        let other = NoteType::None;
+        let additions = Additions::None;
 
         Self {
             x,
@@ -60,7 +58,7 @@ impl HitObject {
             note_type,
             hit_sound,
             hit_sample,
-            other,
+            additions,
         }
     }
 }
@@ -70,7 +68,7 @@ impl Circle {
         let mut circle = HitObject::from_split(&split);
 
         circle.hit_sample = split[5].to_string();
-        circle.other = NoteType::Circle( Circle {});
+        circle.additions = Additions::Circle( Circle {});
 
         return circle;
     }
@@ -82,7 +80,7 @@ impl Spinner {
         let mut spinner = HitObject::from_split(&split);
 
         spinner.hit_sample = split[6].to_string();
-        spinner.other = NoteType::Spinner( Spinner { end_time });
+        spinner.additions = Additions::Spinner( Spinner { end_time });
 
         return spinner;
     }
@@ -129,7 +127,7 @@ impl Slider {
         let mut slider = HitObject::from_split(&split,);
 
         slider.hit_sample = hit_sample;
-        slider.other = NoteType::Slider(Slider {
+        slider.additions = Additions::Slider(Slider {
             params,
             slides,
             length,
@@ -152,7 +150,7 @@ impl Hold {
         let mut hold = HitObject::from_split(&split);
 
         hold.hit_sample = last_entry.next().unwrap_or_else(|| "0:0:0:0:").to_string();
-        hold.other = NoteType::Hold( Hold { end_time });
+        hold.additions = Additions::Hold( Hold { end_time });
 
         return hold;
     }

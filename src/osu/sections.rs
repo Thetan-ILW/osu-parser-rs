@@ -3,7 +3,7 @@
 use crate::osu;
 use osu::{TimePoint, Color};
 use osu::Event;
-use osu::note::{NoteType, HitObject, Circle, Slider, Spinner, Hold};
+use osu::note::HitObject;
 
 pub struct General {
     pub audio_filename: String,

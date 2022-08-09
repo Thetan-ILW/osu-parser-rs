@@ -5,19 +5,23 @@ pub struct HitObject {
     pub note_type: u8,
     pub hit_sound: u8,
     pub hit_sample: String,
-    pub other: NoteType,
+    pub additions: Additions,
 }
 
+#[derive(PartialEq)]
 pub struct Circle;
 
+#[derive(PartialEq)]
 pub struct Spinner {
     pub end_time: f64,
 }
 
+#[derive(PartialEq)]
 pub struct Hold {
     pub end_time: f64,
 }
 
+#[derive(PartialEq)]
 pub struct Slider {
     pub params: String,
     pub slides: u32,
@@ -26,7 +30,8 @@ pub struct Slider {
     pub edge_sets: [String; 2],
 }
 
-pub enum NoteType {
+#[derive(PartialEq)]
+pub enum Additions {
     None,
     Circle(Circle),
     Slider(Slider),

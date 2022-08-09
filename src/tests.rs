@@ -1,5 +1,7 @@
 #[cfg(test)]
 mod tests {
+    use crate::osu::note::Additions;
+
     #[test]
     fn import_beatmap() {
         let filename = String::from("test_files/beatmap.osu");
@@ -15,7 +17,16 @@ mod tests {
         assert_eq!(beatmap.info.general.letter_box_in_breaks, false);
         assert_eq!(beatmap.info.general.samples_match_playback_rate, true);
         assert_eq!(beatmap.timing_points.data[0].time, 999.0);
-        assert_eq!(beatmap.hit_objects.data[2].time, 15.0);
+        
+        let additions = &beatmap.hit_objects.data[3].additions;
+
+        match additions {
+            Additions::Slider(slider) => {
+                assert_eq!(slider.length, 500.0)
+            }
+            _ => panic!("wrong index lol")
+        }
+
         println!("{}", beatmap.info.events.data[0].params[0]);
     }
     #[test]

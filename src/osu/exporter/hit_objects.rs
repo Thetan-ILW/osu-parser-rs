@@ -1,5 +1,5 @@
 use crate::osu;
-use osu::note::{NoteType, HitObject, Circle, Slider, Spinner, Hold};
+use osu::note::{Additions, HitObject, Slider, Spinner, Hold};
 use osu::sections::HitObjects;
 
 use std::fmt::Write;
@@ -11,24 +11,24 @@ pub fn get(h: &HitObjects) -> Result<String, Error> {
     writeln!(&mut lines, "[HitObjects]")?;
 
     for item in &h.data {
-        match &item.other {
-            NoteType::None => {
+        match &item.additions {
+            Additions::None => {
                 panic!("lol")
             },
-            NoteType::Circle(_)  => {
+            Additions::Circle(_)  => {
                 let circle = get_circle_line(item);
                 writeln!(&mut lines, "{circle}")?;
             }
-            NoteType::Slider(other) => {
+            Additions::Slider(other) => {
                 let slider = get_slider_line(item, other);
                 writeln!(&mut lines, "{slider}")?;
 
             }
-            NoteType::Spinner(other) => {
+            Additions::Spinner(other) => {
                 let spinner = get_spinner_line(item, other);
                 writeln!(&mut lines, "{spinner}")?;
             }
-            NoteType::Hold(other) => {
+            Additions::Hold(other) => {
                 let hold = get_hold_line(item, other);
                 writeln!(&mut lines, "{hold}")?;
             } 
