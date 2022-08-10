@@ -36,11 +36,42 @@ println!("{} - {}", metadata.artist, metadata.title);
 ```
 Access to notes
 ```rust
-let circle = &beatmap.hit_objects.circles[0];
-let circle_x = circle.x;
-let circle_y = circle.y;
+let filename = String::from("test_files/beatmap.osu");
+let beatmap = crate::import(&filename);
 
-let slider = &beatmap.hit_objects.sliders[0];
-let slider_time = slider.time;
-let slider_length = slider.other.length;
+let mut beatmap = match beatmap {
+    Ok(beatmap) => beatmap,
+    Err(e) => panic!("🥶 failed to parse beatmap: {}", e),
+};
+
+// Getting the very first note
+let note = &beatmap.hit_objects.data[0];
+
+// General data for each type of note can be obtained like this
+// or you can get any
+println!("x: {}", note.x);
+println!("y: {}", note.y);
+println!("time: {}", note.time);
+
+/*  
+    To get unique parameters of different types of notes, 
+    you need to check additions type and only after 
+    that you can work with their own parameters
+*/
+match &note.additions {
+    Additions::Slider(additions) => {
+        println!("params: {}", additions.params);
+        println!("length: {}", additions.length);
+        println!("slides: {}", additions.slides)
+    },
+    Additions::Spinner(additions) => {
+        println!("end time: {}", additions.end_time)
+    },
+    Additions::Hold(additions) => {
+        println!("end time: {}", additions.end_time)
+    }
+    _ => {
+        // The circle does not have its own unique parameters
+    }
+}
 ```
