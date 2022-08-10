@@ -45,10 +45,10 @@ let mut beatmap = match beatmap {
 };
 
 // Getting the very first note
+// or you can get any
 let note = &beatmap.hit_objects.data[0];
 
 // General data for each type of note can be obtained like this
-// or you can get any
 println!("x: {}", note.x);
 println!("y: {}", note.y);
 println!("time: {}", note.time);
