@@ -45,5 +45,5 @@ fn get_section<T: Import + Default>(sections: &BTreeMap<String, Vec<String>>, na
 }
 
 pub trait Import {
-    fn parse(strings: &Vec<String>) -> Self; // rename this
+    fn parse(strings: &Vec<String>) -> Self;
 }

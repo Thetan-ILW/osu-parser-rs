@@ -26,6 +26,10 @@ impl Export for Events {
 
         return Ok(lines)
     }
+
+    fn default_string() -> String {
+        "[Events]".to_string()
+    }
 }
 
 impl Export for Colors {
@@ -50,5 +54,9 @@ impl Export for Colors {
         }
 
         return Ok(lines)
+    }
+
+    fn default_string() -> String {
+        "".to_string()
     }
 }

@@ -97,4 +97,17 @@ mod tests {
         
         println!("Exported in {}", now.elapsed().as_millis() - import_time)
     }
+
+    #[test]
+    fn import_broken_beatmap() {
+        let filename = String::from("test_files/broken.osu");
+        let beatmap = crate::import(&filename);
+
+        let beatmap = match beatmap {
+            Ok(beatmap) => beatmap,
+            Err(e) => panic!("|| failed to parse beatmap: {}", e),
+        };
+
+
+    }
 }

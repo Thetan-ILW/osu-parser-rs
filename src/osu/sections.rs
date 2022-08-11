@@ -5,10 +5,6 @@ use osu::{TimePoint, Color};
 use osu::Event;
 use osu::note::HitObject;
 
-pub trait DefaultExport {
-    fn default_export() -> String;
-}
-
 pub struct General {
     pub audio_filename: String,
     pub audio_lead_in: f64,
@@ -51,21 +47,6 @@ impl Default for General {
     }
 }
 
-impl DefaultExport for General {
-    fn default_export() -> String {
-"[General]
-AudioLeadIn: 0
-PreviewTime: -1
-Countdown: 1
-SampleSet: Normal
-StackLeniency: 0.7
-Mode: 0
-LetterboxInBreaks: 0
-WidescreenStoryboard: 1
-SamplesMatchPlaybackRate: 1".to_string()
-    }
-}
-
 #[derive(Default)]
 pub struct Editor {
     pub bookmarks: Vec<f64>,
@@ -73,16 +54,6 @@ pub struct Editor {
     pub beat_divisor: f32,
     pub grid_size: f32,
     pub timeline_zoom: f32,
-}
-
-impl DefaultExport for Editor {
-    fn default_export() -> String {
-"[Editor]
-DistanceSpacing: 1
-BeatDivisor: 0
-GridSize: 0
-TimelineZoom: 1".to_string()
-    }
 }
 
 #[derive(Default)]
@@ -97,16 +68,6 @@ pub struct Metadata {
     pub tags: Vec<String>,
     pub beatmap_id: i32,
     pub beatmap_set_id: i32,
-}
-
-impl DefaultExport for Metadata {
-    fn default_export() -> String {
-"[Metadata]
-Title: 
-Artist: 
-Creator: 
-Version: ".to_string()
-    }
 }
 
 pub struct Difficulty {
@@ -131,27 +92,9 @@ impl Default for Difficulty {
     }
 }
 
-impl DefaultExport for Difficulty {
-    fn default_export() -> String {
-"[Difficulty]
-HPDrainRate: 5
-CircleSize: 5
-OverallDifficulty: 5
-ApproachRate: 5
-SliderMultiplier: 1
-SliderTickRate: 1".to_string()
-    }
-}
-
 #[derive(Default)]
 pub struct Events {
     pub data: Vec<Event>
-}
-
-impl DefaultExport for Events {
-    fn default_export() -> String {
-        "[Events]".to_string()
-    }
 }
 
 #[derive(Default)]
@@ -159,21 +102,9 @@ pub struct TimingPoints {
     pub data: Vec<TimePoint>
 }
 
-impl DefaultExport for TimingPoints {
-    fn default_export() -> String {
-        "".to_string()
-    }
-}
-
 #[derive(Default)]
 pub struct Colors {
     pub data: Vec<Color>
-}
-
-impl DefaultExport for Colors {
-    fn default_export() -> String {
-        "".to_string()
-    }
 }
 
 #[derive(Default)]
@@ -181,8 +112,4 @@ pub struct HitObjects {
     pub data: Vec<HitObject>,
 }
 
-impl DefaultExport for HitObjects {
-    fn default_export() -> String {
-        "[HitObjects]".to_string()
-    }
-}
+

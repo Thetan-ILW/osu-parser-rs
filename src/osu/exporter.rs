@@ -9,8 +9,6 @@ use std::io::{prelude::*, LineWriter, Error};
 use crate::osu;
 use osu::Beatmap;
 
-use super::sections::DefaultExport;
-
 pub fn write_to_osu(w: &mut LineWriter<File>, beatmap: Beatmap) -> Result<(), Error>{
     const NEW_LINE: &[u8] = b"\n";
     let version = "osu file format v14\n";
@@ -44,18 +42,19 @@ pub fn write_to_osu(w: &mut LineWriter<File>, beatmap: Beatmap) -> Result<(), Er
     return Ok(())
 }
 
-fn get_section_as_string<T: Export + DefaultExport>(section: &T) -> String {
+fn get_section_as_string<T: Export>(section: &T) -> String {
     let lines = section.as_string();
 
     match lines {
         Ok(l) => return l,
         Err(e) => return {
             println!("Failed to export section: {e}");
-            T::default_export()
+            T::default_string()
         }
     }
 }
 
 pub trait Export {
     fn as_string(&self) -> Result<String, std::fmt::Error>;
+    fn default_string() -> String;
 }

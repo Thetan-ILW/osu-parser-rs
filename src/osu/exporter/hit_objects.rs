@@ -13,10 +13,10 @@ impl Export for HitObjects {
 
         for item in &self.data {
             let line = match &item.additions {
-                Additions::Circle(_)  => HitObjects::get_circle_line(item),
-                Additions::Slider(additions) => HitObjects::get_slider_line(item, additions),
-                Additions::Spinner(additions) => HitObjects::get_spinner_line(item, additions),
-                Additions::Hold(additions) => HitObjects::get_hold_line(item, additions),
+                Additions::Circle(_)  => HitObjects::circle_as_string(item),
+                Additions::Slider(additions) => HitObjects::slider_as_string(item, additions),
+                Additions::Spinner(additions) => HitObjects::spinner_as_string(item, additions),
+                Additions::Hold(additions) => HitObjects::hold_as_string(item, additions),
                 Additions::None => panic!("Unknown object")
             };
 
@@ -25,10 +25,14 @@ impl Export for HitObjects {
 
         return Ok(lines)
     }
+
+    fn default_string() -> String {
+        "[HitObjects]".to_string()
+    }
 }
 
 impl HitObjects {
-    fn get_circle_line(c: &HitObject) -> String{
+    fn circle_as_string(c: &HitObject) -> String{
         let line = format!(
             "{},{},{},{},{},{}",
             c.x,
@@ -42,7 +46,7 @@ impl HitObjects {
         return line
     }
     
-    fn get_slider_line(s: &HitObject, additions: &Slider) -> String {
+    fn slider_as_string(s: &HitObject, additions: &Slider) -> String {
         let edge_sounds = format!(
             "{}|{}",
             additions.edge_sounds[0],
@@ -73,7 +77,7 @@ impl HitObjects {
         return line
     }
     
-    fn get_spinner_line(s: &HitObject, additions: &Spinner) -> String {
+    fn spinner_as_string(s: &HitObject, additions: &Spinner) -> String {
         let line = format!(
             "{},{},{},{},{},{},{}",
             s.x,
@@ -88,7 +92,7 @@ impl HitObjects {
         return line
     }
     
-    fn get_hold_line(h: &HitObject, additions: &Hold) -> String {
+    fn hold_as_string(h: &HitObject, additions: &Hold) -> String {
         let line = format!(
             "{},{},{},{},{},{}:{}",
             h.x,

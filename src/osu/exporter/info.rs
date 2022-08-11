@@ -48,6 +48,19 @@ SamplesMatchPlaybackRate: {}",
         writeln!(&mut lines, "{formated}")?;
         return Ok(lines);
     }
+
+    fn default_string() -> String {
+"[General]
+AudioLeadIn: 0
+PreviewTime: -1
+Countdown: 1
+SampleSet: Normal
+StackLeniency: 0.7
+Mode: 0
+LetterboxInBreaks: 0
+WidescreenStoryboard: 1
+SamplesMatchPlaybackRate: 1".to_string()
+    }
 }
 
 impl Export for Editor {
@@ -82,6 +95,14 @@ TimelineZoom: {}",
         writeln!(&mut lines, "{formated}")?;
 
         return Ok(lines)
+    }
+
+    fn default_string() -> String {
+"[Editor]
+DistanceSpacing: 1
+BeatDivisor: 0
+GridSize: 0
+TimelineZoom: 1".to_string()
     }
 }
 
@@ -134,6 +155,14 @@ Version: {}",
 
         return Ok(lines)
     }
+
+    fn default_string() -> String {
+"[Metadata]
+Title: 
+Artist: 
+Creator: 
+Version: ".to_string()
+    }
 }
 
 impl Export for Difficulty {
@@ -158,5 +187,15 @@ SliderTickRate: {}",
 
         writeln!(&mut lines, "{formated}")?;
         return Ok(lines)
+    }
+
+    fn default_string() -> String {
+"[Difficulty]
+HPDrainRate: 5
+CircleSize: 5
+OverallDifficulty: 5
+ApproachRate: 5
+SliderMultiplier: 1
+SliderTickRate: 1".to_string()
     }
 }

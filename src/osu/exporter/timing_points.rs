@@ -28,4 +28,8 @@ impl Export for TimingPoints {
 
         return Ok(lines)
     }
+
+    fn default_string() -> String {
+        "".to_string()
+    }
 }
