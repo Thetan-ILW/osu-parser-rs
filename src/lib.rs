@@ -3,7 +3,7 @@ use std::fs::File;
 use std::io::Error;
 use std::io::{prelude::*, BufReader, LineWriter};
 
-mod osu;
+pub mod osu;
 use osu::importer;
 use osu::exporter;
 use osu::{Info, Beatmap};
