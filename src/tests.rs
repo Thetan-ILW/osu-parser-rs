@@ -89,7 +89,7 @@ mod tests {
         assert_eq!(beatmap.info.events.data[0].params[0], "kody_title.jpg".to_string());
 
         beatmap.info.metadata.version = "exported".to_string();
-        let result = crate::export("test_files/new.osu", beatmap);
+        let result = crate::export("test_files/new.osu", &beatmap);
         match result {
             Ok(_) => println!("success"),
             Err(e) => panic!("uhhh ummm {e}")

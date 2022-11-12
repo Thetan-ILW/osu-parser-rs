@@ -9,7 +9,7 @@ use std::io::{prelude::*, LineWriter, Error};
 use crate::osu;
 use osu::Beatmap;
 
-pub fn write_to_osu(w: &mut LineWriter<File>, beatmap: Beatmap) -> Result<(), Error>{
+pub fn write_to_osu(w: &mut LineWriter<File>, beatmap: &Beatmap) -> Result<(), Error>{
     const NEW_LINE: &[u8] = b"\n";
     let version = "osu file format v14\n";
 

@@ -46,7 +46,7 @@ pub fn import_hit_objects(filename: &str) -> Result<HitObjects, Error> {
     return Ok(importer::get_hit_objects(&data))
 }
 
-pub fn export(path: &str, beatmap: Beatmap) -> Result<(), Error> {
+pub fn export(path: &str, beatmap: &Beatmap) -> Result<(), Error> {
     let file = File::create(path)?;
     let mut writer = LineWriter::new(file);
     exporter::write_to_osu(&mut writer, beatmap)?;
