@@ -1,3 +1,4 @@
+#[derive(Clone, PartialEq)]
 pub struct HitObject {
     pub x: f32,
     pub y: f32,
@@ -8,20 +9,20 @@ pub struct HitObject {
     pub additions: Additions,
 }
 
-#[derive(PartialEq)]
+#[derive(Clone, PartialEq)]
 pub struct Circle;
 
-#[derive(PartialEq)]
+#[derive(Clone, PartialEq)]
 pub struct Spinner {
     pub end_time: f64,
 }
 
-#[derive(PartialEq)]
+#[derive(Clone, PartialEq)]
 pub struct Hold {
     pub end_time: f64,
 }
 
-#[derive(PartialEq)]
+#[derive(Clone, PartialEq)]
 pub struct Slider {
     pub params: String,
     pub slides: u32,
@@ -30,7 +31,7 @@ pub struct Slider {
     pub edge_sets: [String; 2],
 }
 
-#[derive(PartialEq)]
+#[derive(Clone, PartialEq)]
 pub enum Additions {
     None,
     Circle(Circle),

@@ -5,6 +5,7 @@ use osu::{TimePoint, Color};
 use osu::Event;
 use osu::note::HitObject;
 
+#[derive(Clone)]
 pub struct General {
     pub audio_filename: String,
     pub audio_lead_in: f64,
@@ -47,7 +48,7 @@ impl Default for General {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct Editor {
     pub bookmarks: Vec<f64>,
     pub distance_spacing: f32,
@@ -56,7 +57,7 @@ pub struct Editor {
     pub timeline_zoom: f32,
 }
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct Metadata {
     pub title: String,
     pub title_unicode: String,
@@ -70,6 +71,7 @@ pub struct Metadata {
     pub beatmap_set_id: i32,
 }
 
+#[derive(Clone)]
 pub struct Difficulty {
     pub hp_drain_rate: f32,
     pub circle_size: f32,
@@ -92,22 +94,22 @@ impl Default for Difficulty {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct Events {
     pub data: Vec<Event>
 }
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct TimingPoints {
     pub data: Vec<TimePoint>
 }
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct Colors {
     pub data: Vec<Color>
 }
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct HitObjects {
     pub data: Vec<HitObject>,
 }

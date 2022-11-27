@@ -9,6 +9,7 @@ use crate::osu::sections::{
     TimingPoints, HitObjects
 };
 
+#[derive(Clone)]
 pub struct TimePoint {
     pub time: f64,
     pub beat_length: f64,
@@ -20,6 +21,7 @@ pub struct TimePoint {
     pub effects: u8,
 }
 
+#[derive(Clone)]
 pub struct Event {
     pub e_type: String,
     pub start_time: f64,
