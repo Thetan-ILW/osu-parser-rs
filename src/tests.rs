@@ -1,3 +1,7 @@
+/*
+    WELCOME TO HELL!
+*/
+
 #[cfg(test)]
 mod tests {
     use crate::osu::note::Additions;
@@ -32,7 +36,7 @@ mod tests {
     #[test]
     fn import_only_hit_objects() {
         let filename = String::from("test_files/refactor.osu");
-        let hit_objects = crate::import_hit_objects(&filename);
+        let hit_objects = crate::import_section(&filename, crate::Section::HitObjects(None));
 
         let _ = match hit_objects {
             Ok(hit_objects) => hit_objects,
@@ -40,10 +44,10 @@ mod tests {
         };
 
         let filename = String::from("test_files/refactor-spinnerz.osu");
-        let _ = crate::import_hit_objects(&filename);
+        let _ = crate::import_section(&filename, crate::Section::HitObjects(None));
 
         let filename = String::from("test_files/refactor-holds.osu");
-        let _ = crate::import_hit_objects(&filename);
+        let _ = crate::import_section(&filename, crate::Section::HitObjects(None));
     }
     #[test]
     fn color_test() {

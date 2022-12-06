@@ -12,7 +12,23 @@ use osu::sections::{TimingPoints, HitObjects};
 #[cfg(test)]
 mod tests;
 
-pub fn import(filename: &str) -> Result<Beatmap, Error> {
+/// Only used in conjunction with import_section()
+pub enum Section {
+    Info(Option<Info>),
+    TimingPoints(Option<TimingPoints>),
+    HitObjects(Option<HitObjects>)
+}
+
+/// Fully import the beatmap
+/// ```
+/// let beatmap = match osu_parser::import("test_files/beatmap.osu") {
+///     Ok(beatmap) => beatmap,
+///     Err(error) => panic!("Failed to import beatmap: {}", error)
+/// };
+/// ```
+pub fn import(filename: impl Into<String>) -> Result<Beatmap, Error> {
+    let filename = filename.into();
+
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
 
@@ -27,25 +43,29 @@ pub fn import(filename: &str) -> Result<Beatmap, Error> {
     })
 }
 
-// It looks terrible
-pub fn import_info(filename: &str) -> Result<Info, Error> {
+/// Import of a specific section.
+/// Takes a path to an .osu file, and a Section enum.
+/// ```
+/// let info = osu_parser::import_section("my_beatmap.osu", osu_parser::Section::Info(None));
+/// let timing_objects = osu_parser::import_section("my_beatmap.osu", osu_parser::Section::TimingPoints(None));
+/// let hit_objects = osu_parser::import_section("my_beatmap.osu", osu_parser::Section::HitObjects(None));
+/// ```
+pub fn import_section(filename: impl Into<String>, section: Section) -> Result<Section, Error> {
+    let filename = filename.into();
+
     let reader = open_file(&filename)?;
     let data = get_sections(reader)?;
-    return Ok(importer::get_info(&data));
+
+    return Ok(match section {
+        Section::Info(_) => Section::Info(Some(importer::get_info(&data))),
+        Section::TimingPoints(_) => Section::TimingPoints(Some(importer::get_timing_points(&data))),
+        Section::HitObjects(_) => Section::HitObjects(Some(importer::get_hit_objects(&data))),
+    })
 }
 
-pub fn import_timing_points(filename: &str) -> Result<TimingPoints, Error> {
-    let reader = open_file(&filename)?;
-    let data = get_sections(reader)?;
-    return Ok(importer::get_timing_points(&data))
-}
-
-pub fn import_hit_objects(filename: &str) -> Result<HitObjects, Error> {
-    let reader = open_file(&filename)?;
-    let data = get_sections(reader)?;
-    return Ok(importer::get_hit_objects(&data))
-}
-
+/// Takes a Beatmap struct and writes it to a file.
+/// Will be removed in the future, and replaced with Beatmap::to_string(), so that everyone 
+/// writes to the file the way they want
 pub fn export(path: &str, beatmap: &Beatmap) -> Result<(), Error> {
     let file = File::create(path)?;
     let mut writer = LineWriter::new(file);
