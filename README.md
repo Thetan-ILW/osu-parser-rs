@@ -1,4 +1,4 @@
-# osu-parser-rust
+# osu-parser-rs
 practice project, don’t expect much
 
 ### Done:
@@ -13,7 +13,7 @@ ____
 Add this to your Cargo.toml file:
 ```toml
 [dependencies]
-osu-parser = { git = "https://github.com/Righeil/osu-parser-rust" }
+osu-parser = { git = "https://github.com/Righeil/osu-parser-rs" }
 ```
 Import the beatmap like this:
 
